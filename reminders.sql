@@ -16,7 +16,7 @@ CREATE TABLE reminders (
     description TEXT NOT NULL,
     priority    TEXT CHECK( priority IN ('', 'L','M','H') ) NOT NULL DEFAULT '',
     status      TEXT CHECK( status IN ('p', 'c', 'd', 'r', 'w') ) NOT NULL DEFAULT 'p',
-    entry       TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', datetime('now'))),
+    entry       TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
     start       TEXT,
     end         TEXT,
     scheduled   TEXT,
@@ -50,8 +50,8 @@ CREATE TABLE dependencies (
 
 
 CREATE TABLE tags (
-    id              INTEGER PRIMARY KEY AUTOINCREMENT,
-    tag             TEXT UNIQUE NOT NULL
+    id  INTEGER PRIMARY KEY AUTOINCREMENT,
+    tag TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE remindersXtags (
