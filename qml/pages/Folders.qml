@@ -28,24 +28,61 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <QGuiApplication>
-#include <QQuickView>
-#include <QtQuick>
+import QtQuick 2.0
+import Sailfish.Silica 1.0
 
-#include <sailfishapp.h>
+import "../components"
+import "../models"
 
 
-int main(int argc, char *argv[])
-{
-    QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
-    app->setOrganizationName("org.kubler");
-    app->setApplicationName("Reminders");
+Page {
+    id: page
 
-    QScopedPointer<QQuickView> view(SailfishApp::createView());
+    /**
+     * Return the translated name of the given section.
+     * Needed because we can't use qsTr in the ListModel :(
+     */
+    function i18nCategory(c)
+    {
+        var r = qsTr("Smart Folders")
 
-    view->setSource(SailfishApp::pathTo("qml/Reminders.qml"));
-    view->showFullScreen();
+        if(c === "project")
+            r = qsTr("Projects")
 
-    return app->exec();
+        return r
+    }
+
+    SilicaListView {
+        anchors.fill: parent
+        delegate: FolderDelegate {}
+        header: PageHeader {
+            title: qsTr("Reminders")
+        }
+        model: FoldersModel { id: foldersModel }
+        section {
+            criteria: ViewSection.FullString
+            delegate: SectionHeader {
+                font {
+                    capitalization: Font.Capitalize
+                }
+                text: i18nCategory(section)
+            }
+            property: 'category'
+        }
+
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Add a Reminder...")
+            }
+        }
+
+        VerticalScrollDecorator {}
+    }
+
+    onStatusChanged: {
+        if(status === PageStatus.Active)
+        {
+            foldersModel.refresh();
+        }
+    }
 }
-

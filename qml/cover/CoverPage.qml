@@ -28,24 +28,27 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <QGuiApplication>
-#include <QQuickView>
-#include <QtQuick>
+import QtQuick 2.0
+import Sailfish.Silica 1.0
 
-#include <sailfishapp.h>
+CoverBackground {
+    Label {
+        id: label
+        anchors.centerIn: parent
+        text: qsTr("My Cover")
+    }
 
+    CoverActionList {
+        id: coverAction
 
-int main(int argc, char *argv[])
-{
-    QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
-    app->setOrganizationName("org.kubler");
-    app->setApplicationName("Reminders");
+        CoverAction {
+            iconSource: "image://theme/icon-cover-next"
+        }
 
-    QScopedPointer<QQuickView> view(SailfishApp::createView());
-
-    view->setSource(SailfishApp::pathTo("qml/Reminders.qml"));
-    view->showFullScreen();
-
-    return app->exec();
+        CoverAction {
+            iconSource: "image://theme/icon-cover-pause"
+        }
+    }
 }
+
 

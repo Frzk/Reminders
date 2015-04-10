@@ -28,24 +28,16 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <QGuiApplication>
-#include <QQuickView>
-#include <QtQuick>
+import QtQuick 2.0
+import Sailfish.Silica 1.0
 
-#include <sailfishapp.h>
+import "pages"
 
 
-int main(int argc, char *argv[])
+ApplicationWindow
 {
-    QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
-    app->setOrganizationName("org.kubler");
-    app->setApplicationName("Reminders");
-
-    QScopedPointer<QQuickView> view(SailfishApp::createView());
-
-    view->setSource(SailfishApp::pathTo("qml/Reminders.qml"));
-    view->showFullScreen();
-
-    return app->exec();
+    initialPage: Component { Folders { } }
+    cover: Qt.resolvedUrl("cover/CoverPage.qml")
 }
+
 
