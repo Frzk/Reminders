@@ -14,9 +14,19 @@ TARGET = harbour-reminders
 
 CONFIG += sailfishapp
 
-SOURCES += src/Reminders.cpp
+QT += sql
 
-OTHER_FILES += qml/Reminders.qml \
+HEADERS += \
+    src/ProjectsModel.h \
+    src/Storage.h
+
+SOURCES += \
+    src/Reminders.cpp \
+    src/ProjectsModel.cpp \
+    src/Storage.cpp
+
+OTHER_FILES += \
+    qml/Reminders.qml \
     qml/models/FoldersModel.qml \
     qml/cover/CoverPage.qml \
     qml/components/FolderDelegate.qml \
@@ -36,4 +46,3 @@ CONFIG += sailfishapp_i18n
 # following TRANSLATIONS line. And also do not forget to
 # modify the localized app name in the the .desktop file.
 #TRANSLATIONS += translations/harbour-reminders-de.ts
-

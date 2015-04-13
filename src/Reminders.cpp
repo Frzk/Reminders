@@ -33,7 +33,7 @@
 #include <QtQuick>
 
 #include <sailfishapp.h>
-
+#include "Storage.h"
 
 int main(int argc, char *argv[])
 {
@@ -42,6 +42,11 @@ int main(int argc, char *argv[])
     app->setApplicationName("Reminders");
 
     QScopedPointer<QQuickView> view(SailfishApp::createView());
+
+    Storage *storage = new Storage();
+
+    view->rootContext()->setContextProperty("projectsModel", storage->getProjects());
+    //view->rootContext()->setContextObject(controller);
 
     view->setSource(SailfishApp::pathTo("qml/Reminders.qml"));
     view->showFullScreen();
