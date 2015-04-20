@@ -39,7 +39,7 @@ ListItem {
         right: parent.right
     }
     contentHeight: Theme.itemSizeSmall
-    menu: category === "project" ? contextMenu : null
+    //menu: category === "project" ? contextMenu : null
 
     Label {
         id: folderLabel
@@ -53,7 +53,7 @@ ListItem {
         }
         color: highlighted ? Theme.highlightColor : Theme.primaryColor
         font.pixelSize: Theme.fontSizeMedium
-        text: value
+        text: i18nSmartFolder(name)
         truncationMode: TruncationMode.Fade
     }
     Label
@@ -68,7 +68,7 @@ ListItem {
         color: highlighted ? Theme.highlightColor : Theme.secondaryColor
         font.pixelSize: Theme.fontSizeSmall
         horizontalAlignment: Text.AlignRight
-        text: nbItems
+        text: nb
         truncationMode: TruncationMode.Fade
     }
 
@@ -92,14 +92,16 @@ ListItem {
     }
 
     onClicked: {
-        console.log("Reminders for " + value)
+        console.log("Reminders for " + name)
+        /*
         if(category === "project")
-            pageStack.push(Qt.resolvedUrl("../pages/Project.qml"), {projectName: value})
+            pageStack.push(Qt.resolvedUrl("../pages/Project.qml"), {projectName: name})
         else
             pageStack.push(Qt.resolvedUrl("../pages/" + page))
+        */
     }
 
     function edit() {
-        pageStack.push(Qt.resolvedUrl("../pages/EditProjectDialog.qml"), {listName: value})
+        pageStack.push(Qt.resolvedUrl("../pages/EditProjectDialog.qml"), {listName: name})
     }
 }

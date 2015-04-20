@@ -32,7 +32,6 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 import "../components"
-import "../models"
 
 
 Page {
@@ -52,13 +51,50 @@ Page {
         return r
     }
 
+    /**
+     * Return the translated name for the Smart Folders.
+     * Smart Folders are gathered from the database with an "id-number"
+     * that need to be transformed into a suitable, human-friendly name.
+     */
+    function i18nSmartFolder(n)
+    {
+        var r = "";
+
+        switch(n)
+        {
+            case "01":
+                r = qsTr("Today");
+                break;
+            case "02":
+                r = qsTr("Overdue");
+                break;
+            case "03":
+                r = qsTr("Next 7 days");
+                break;
+            case "04":
+                r = qsTr("Someday");
+                break;
+            case "05":
+                r = qsTr("Completed");
+                break;
+            case "06":
+                r = qsTr("Trash");
+                break;
+            default:
+                r = n;
+                break;
+        }
+
+        return r;
+    }
+
     SilicaListView {
         anchors.fill: parent
         delegate: FolderDelegate {}
         header: PageHeader {
             title: qsTr("Reminders")
         }
-        model: FoldersModel { id: foldersModel }
+        model: foldersModel
         section {
             criteria: ViewSection.FullString
             delegate: SectionHeader {
@@ -79,10 +115,12 @@ Page {
         VerticalScrollDecorator {}
     }
 
+    /*
     onStatusChanged: {
         if(status === PageStatus.Active)
         {
             foldersModel.refresh();
         }
     }
+    */
 }

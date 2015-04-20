@@ -33,5 +33,29 @@
         <source>Add a Reminder...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Today</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overdue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next 7 days</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Someday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Completed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trash</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

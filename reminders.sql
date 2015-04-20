@@ -143,8 +143,32 @@ CREATE TRIGGER update_status_recurring_on
 
 -- VIEWS
 
-CREATE VIEW projects AS
-    SELECT project, COUNT(NULLIF('c', status)) AS nb
+CREATE VIEW folders AS
+    SELECT "01" AS project, COUNT(uuid) AS nb, 'folder' AS category
+    FROM reminders
+    WHERE status = 'p' AND date(due) = date('now')
+    UNION
+    SELECT "02" AS project, COUNT(uuid) AS nb, 'folder' AS category
+    FROM reminders
+    WHERE status = 'p' AND datetime(due) < datetime('now')
+    UNION
+    SELECT "03" AS project, COUNT(uuid) AS nb, 'folder' AS category
+    FROM reminders
+    WHERE date(due) BETWEEN date('now') AND date('now', '+7 days')
+    UNION
+    SELECT "04" AS project, COUNT(uuid) AS nb, 'folder' AS category
+    FROM reminders
+    WHERE status = 'p' AND due IS NULL
+    UNION
+    SELECT "05" AS project, COUNT(uuid) AS nb, 'folder' AS category
+    FROM reminders
+    WHERE status = 'c'
+    UNION
+    SELECT "06" AS project, COUNT(uuid) AS nb, 'folder' AS category
+    FROM reminders
+    WHERE status = 'd'
+    UNION
+    SELECT project, COUNT(NULLIF('c', status)) AS nb, 'project' AS category
     FROM reminders
     WHERE status = 'p' OR status = 'c'
     GROUP BY project;

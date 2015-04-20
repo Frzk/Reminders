@@ -34,6 +34,8 @@
 
 #include <sailfishapp.h>
 #include "Storage.h"
+//#include "ProjectsModel.h"
+#include "FoldersModel.h"
 
 int main(int argc, char *argv[])
 {
@@ -43,9 +45,11 @@ int main(int argc, char *argv[])
 
     QScopedPointer<QQuickView> view(SailfishApp::createView());
 
-    Storage *storage = new Storage();
+    //Storage *storage = new Storage();
+    //ProjectsModel *foldersModel = new ProjectsModel();
+    FoldersModel *foldersModel = new FoldersModel();
 
-    view->rootContext()->setContextProperty("projectsModel", storage->getProjects());
+    view->rootContext()->setContextProperty("foldersModel", foldersModel);
     //view->rootContext()->setContextObject(controller);
 
     view->setSource(SailfishApp::pathTo("qml/Reminders.qml"));
