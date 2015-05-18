@@ -102,7 +102,7 @@ ListItem {
         else
             pageStack.push(Qt.resolvedUrl("../pages/" + page))
         */
-        pageStack.push(Qt.resolvedUrl("../pages/Tasks.qml"), {title: name})
+        pageStack.push(Qt.resolvedUrl("../pages/Reminders.qml"), {title: name})
     }
 
     function edit() {
