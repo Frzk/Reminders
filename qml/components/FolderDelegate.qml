@@ -31,6 +31,9 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
+import "../pragma/Helpers.js" as Helpers
+
+
 ListItem {
     id: listItem
 
@@ -53,7 +56,7 @@ ListItem {
         }
         color: highlighted ? Theme.highlightColor : Theme.primaryColor
         font.pixelSize: Theme.fontSizeMedium
-        text: i18nSmartFolder(name)
+        text: Helpers.i18nSmartFolder(name)
         truncationMode: TruncationMode.Fade
     }
     Label
@@ -99,6 +102,7 @@ ListItem {
         else
             pageStack.push(Qt.resolvedUrl("../pages/" + page))
         */
+        pageStack.push(Qt.resolvedUrl("../pages/Tasks.qml"), {title: name})
     }
 
     function edit() {
