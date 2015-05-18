@@ -30,6 +30,7 @@ OTHER_FILES += \
     qml/Reminders.qml \
     qml/cover/CoverPage.qml \
     qml/components/FolderDelegate.qml \
+    qml/components/ReminderDelegate.qml \
     qml/pages/Folders.qml \
     qml/pages/Reminders.qml \
     qml/pragma/Helpers.js \

@@ -5,6 +5,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
+import "../components"
 import "../pragma/Helpers.js" as Helpers
 
 
@@ -15,19 +16,7 @@ Page {
 
     SilicaListView {
         anchors.fill: parent
-        delegate: ListItem {
-            id: listItem
-
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
-            contentHeight: Theme.itemSizeSmall
-
-            Label {
-                text: Helpers.i18nSmartFolder(name)
-            }
-        }
+        delegate: ReminderDelegate {}
         header: PageHeader {
             title: Helpers.i18nSmartFolder(page.title)
         }
