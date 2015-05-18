@@ -12,7 +12,8 @@
 # The name of your application
 TARGET = harbour-reminders
 
-CONFIG += sailfishapp_i18n \
+CONFIG += sailfishapp \
+    sailfishapp_i18n \
     c++11
 
 QT += sql
