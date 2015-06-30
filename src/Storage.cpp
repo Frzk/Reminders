@@ -85,7 +85,7 @@ static const QLatin1String createFoldersView(
     "\n CREATE VIEW folders AS"
     "\n     SELECT '01' AS project, COUNT(uuid) AS nb, 'folder' AS category"
     "\n     FROM reminders"
-    "\n     WHERE status = 'p' AND date(due) = date('now');"
+    "\n     WHERE status = 'p' AND date(due) = date('now')"
     "\n     UNION"
     "\n     SELECT '02' AS project, COUNT(uuid) AS nb, 'folder' AS category"
     "\n     FROM reminders"
@@ -477,6 +477,11 @@ bool Storage::openDB()
                     this->m_db.close();
                     qDebug() << QString("Failed to prepare the database :\n%1").arg(this->m_db.lastError().text());
                     qDebug() << QString("Removing %1.").arg(path);
+                    QFile::remove(path);
+                }
+                else
+                {
+                    qDebug() << "Successfully initialized Reminders database.";
                 }
             }
             else            // If it did already exist, we still have to configure it.
