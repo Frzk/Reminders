@@ -1,13 +1,13 @@
 #include "FoldersModel.h"
 
+
+
 enum Roles {
     NameRole = Qt::UserRole + 1,        // Name of the folder/project
     NbRole,                             // Number of items contained in this folder
     CategoryRole,                       // Category (either "folder" or "project")
 };
 
-const QString FoldersModel::QUERY =
-    "SELECT project, nb, category FROM folders ORDER BY project COLLATE localeCollation ASC";
 
 
 FoldersModel::FoldersModel(QObject *parent) : QSqlQueryModel(parent)
@@ -46,7 +46,7 @@ QVariant FoldersModel::data(const QModelIndex &index, int role) const
 
 void FoldersModel::refresh()
 {
-    this->setQuery(QUERY);
+    this->setQuery("SELECT project, nb, category FROM folders ORDER BY project COLLATE localeCollation ASC");
 
     qDebug() << QString("FoldersModel refreshed !");
 }

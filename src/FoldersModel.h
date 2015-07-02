@@ -1,9 +1,11 @@
 #ifndef FOLDERSMODEL_H
 #define FOLDERSMODEL_H
 
+#include <QDebug>
 #include <QSqlQueryModel>
 
 #include "./Storage.h"
+
 
 class FoldersModel : public QSqlQueryModel
 {
@@ -19,13 +21,6 @@ class FoldersModel : public QSqlQueryModel
 
         // QML API :
         Q_INVOKABLE void        refresh();
-
-    signals:
-
-    public slots:
-
-    private:
-        const static QString    QUERY;
 };
 
 #endif // FOLDERSMODEL_H
