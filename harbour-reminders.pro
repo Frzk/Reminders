@@ -20,11 +20,13 @@ QT += sql
 
 HEADERS += \
     src/FoldersModel.h \
-    src/Storage.h
+    src/Storage.h \
+    src/ProjectsModel.h
 
 SOURCES += src/Reminders.cpp \
     src/FoldersModel.cpp \
-    src/Storage.cpp
+    src/Storage.cpp \
+    src/ProjectsModel.cpp
 
 OTHER_FILES += \
     qml/Reminders.qml \
