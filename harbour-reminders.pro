@@ -31,12 +31,18 @@ OTHER_FILES += \
     qml/cover/CoverPage.qml \
     qml/components/FolderDelegate.qml \
     qml/components/ReminderDelegate.qml \
+    qml/components/Tag.qml \
     qml/pages/Folders.qml \
+    qml/pages/ProjectPickerDialog.qml \
+    qml/pages/Reminder.qml \
     qml/pages/Reminders.qml \
+    qml/pages/ReminderEditor.qml \
     qml/pragma/Helpers.js \
     rpm/$${TARGET}.changes.in \
     rpm/$${TARGET}.spec \
     rpm/$${TARGET}.yaml \
     $${TARGET}.desktop
+
+
 
 #TRANSLATIONS += translations/harbour-reminders-de.ts
