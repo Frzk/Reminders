@@ -7,18 +7,15 @@ enum Roles {
 };
 
 const QString FoldersModel::QUERY =
-    "SELECT project, nb, category FROM folders ORDER BY project %1 ASC";
+    "SELECT project, nb, category FROM folders ORDER BY project COLLATE localeCollation ASC";
 
 
 FoldersModel::FoldersModel(QObject *parent) : QSqlQueryModel(parent)
 {
-    this->m_storage = new Storage();
-    //this->refresh();
 }
 
 FoldersModel::~FoldersModel()
 {
-    delete this->m_storage;
 }
 
 QHash<int, QByteArray> FoldersModel::roleNames() const
@@ -49,14 +46,7 @@ QVariant FoldersModel::data(const QModelIndex &index, int role) const
 
 void FoldersModel::refresh()
 {
-    //FIXME: seems weird:
-    if(!this->m_storage->isOpen())
-        this->m_storage->openDB();
-
-    if(this->m_storage->isLocalized())
-        this->setQuery(QUERY.arg("COLLATE localeCollation "), *this->m_storage);
-    else
-        this->setQuery(QUERY, *this->m_storage);
+    this->setQuery(QUERY);
 
     qDebug() << QString("FoldersModel refreshed !");
 }

@@ -26,7 +26,6 @@ class FoldersModel : public QSqlQueryModel
 
     private:
         const static QString    QUERY;
-        Storage*                m_storage;
 };
 
 #endif // FOLDERSMODEL_H

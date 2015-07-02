@@ -36,7 +36,8 @@ static const QLatin1String createRemindersTable(
     "\n     imask       TEXT,"
     "\n     parent      TEXT,"
     "\n     project     TEXT NOT NULL DEFAULT ''"
-    "\n );");
+    "\n );"
+);
 
 static const QLatin1String createAnnotationsTable(
     "\n CREATE TABLE annotations ("
@@ -44,7 +45,8 @@ static const QLatin1String createAnnotationsTable(
     "\n     description     TEXT,"
     "\n     reminder_uuid   TEXT,"
     "\n     FOREIGN KEY (reminder_uuid) REFERENCES reminders(uuid) ON DELETE CASCADE"
-    "\n );");
+    "\n );"
+);
 
 static const QLatin1String createDependenciesTable(
     "\n CREATE TABLE dependencies ("
@@ -53,13 +55,15 @@ static const QLatin1String createDependenciesTable(
     "\n     PRIMARY KEY (reminder_uuid, dependency_uuid)"
     "\n     FOREIGN KEY (reminder_uuid) REFERENCES reminders(uuid) ON DELETE CASCADE"
     "\n     FOREIGN KEY (dependency_uuid) REFERENCES reminders(uuid) ON DELETE CASCADE"
-    "\n );");
+    "\n );"
+);
 
 static const QLatin1String createTagsTable(
     "\n CREATE TABLE tags ("
     "\n     id  INTEGER PRIMARY KEY AUTOINCREMENT,"
     "\n     tag TEXT UNIQUE NOT NULL"
-    "\n );");
+    "\n );"
+);
 
 static const QLatin1String createRemindersXTagsTable(
     "\n CREATE TABLE remindersXtags ("
@@ -68,8 +72,8 @@ static const QLatin1String createRemindersXTagsTable(
     "\n     PRIMARY KEY (reminder_uuid, tag_id)"
     "\n     FOREIGN KEY (reminder_uuid) REFERENCES reminders(uuid) ON DELETE CASCADE"
     "\n     FOREIGN KEY (tag_id) REFERENCES tags(id)"
-    "\n );");
-
+    "\n );"
+);
 
 static const QLatin1String createDeleteUnusedTagsTrigger(
     "\n CREATE TRIGGER delete_unused_tags"
@@ -78,8 +82,8 @@ static const QLatin1String createDeleteUnusedTagsTrigger(
     "\n WHEN ((SELECT COUNT(tag_id) FROM remindersXtags WHERE tag_id = OLD.tag_id) = 0)"
     "\n BEGIN"
     "\n     DELETE FROM tags WHERE id = OLD.tag_id;"
-    "\n END;");
-
+    "\n END;"
+);
 
 static const QLatin1String createFoldersView(
     "\n CREATE VIEW folders AS"
@@ -110,14 +114,16 @@ static const QLatin1String createFoldersView(
     "\n     SELECT project, COUNT(NULLIF('c', status)) AS nb, 'project' AS category"
     "\n     FROM reminders"
     "\n     WHERE status = 'p' OR status = 'c'"
-    "\n     GROUP BY project;");
+    "\n     GROUP BY project;"
+);
 
 static const QLatin1String createHaveNextTagView(
     "\n CREATE VIEW have_next_tag AS"
     "\n     SELECT reminder_uuid"
     "\n     FROM remindersXtags"
     "\n     JOIN tags ON remindersXtags.tag_id = tags.id"
-    "\n     WHERE tags.tag = \"next\";");
+    "\n     WHERE tags.tag = \"next\";"
+);
 
 static const QLatin1String createRemindersView(
     "\n CREATE VIEW reminders_view AS"
@@ -133,7 +139,8 @@ static const QLatin1String createRemindersView(
     "\n     LEFT JOIN annotations ON reminders.uuid = annotations.reminder_uuid"
     "\n     LEFT JOIN remindersXtags ON reminders.uuid = remindersXtags.reminder_uuid"
     "\n     LEFT JOIN dependencies ON reminders.uuid = dependencies.dependency_uuid"
-    "\n     GROUP BY reminders.uuid;");
+    "\n     GROUP BY reminders.uuid;"
+);
 
 static const QLatin1String createNbSubtasksView(
     "\n CREATE VIEW nb_subtasks AS"
@@ -153,7 +160,8 @@ static const QLatin1String createNbSubtasksView(
     "\n     )"
     "\n     SELECT r_uuid, COUNT(d_uuid) AS nb"
     "\n     FROM blocking"
-    "\n     GROUP BY r_uuid;");
+    "\n     GROUP BY r_uuid;"
+);
 
 static const QLatin1String createVirtualTagsView(
     "\n CREATE VIEW virtualtags AS"
@@ -184,7 +192,8 @@ static const QLatin1String createVirtualTagsView(
     "\n     FROM reminders_view"
     "\n     LEFT JOIN nb_subtasks ON nb_subtasks.r_uuid = reminders_view.uuid"
     "\n     LEFT JOIN have_next_tag ON have_next_tag.reminder_uuid = reminders_view.uuid"
-    "\n     GROUP BY reminders_view.uuid;");
+    "\n     GROUP BY reminders_view.uuid;"
+);
 
 static const QLatin1String createRView(
     "\n CREATE VIEW r AS"
@@ -235,25 +244,25 @@ static const QLatin1String createRView(
     "\n     AS urgency"
     "\n     FROM reminders_view"
     "\n     LEFT JOIN virtualtags"
-    "\n     ON reminders_view.uuid = virtualtags.uuid;");
+    "\n     ON reminders_view.uuid = virtualtags.uuid;"
+);
 
 
 // Statements used to create the database with the current scheme.
-static const std::vector<QLatin1String> createStatements =
-    {
-        createRemindersTable,
-        createAnnotationsTable,
-        createDependenciesTable,
-        createTagsTable,
-        createRemindersXTagsTable,
-        createDeleteUnusedTagsTrigger,
-        createFoldersView,
-        createRemindersView,
-        createHaveNextTagView,
-        createNbSubtasksView,
-        createVirtualTagsView,
-        createRView,
-    };
+static const std::vector<QLatin1String> createStatements = {
+    createRemindersTable,
+    createAnnotationsTable,
+    createDependenciesTable,
+    createTagsTable,
+    createRemindersXTagsTable,
+    createDeleteUnusedTagsTrigger,
+    createFoldersView,
+    createRemindersView,
+    createHaveNextTagView,
+    createNbSubtasksView,
+    createVirtualTagsView,
+    createRView,
+};
 
 
 // Uncomment and complete that stuff whenever a new database scheme is needed :
@@ -314,22 +323,16 @@ static bool execute(QSqlDatabase &database, const QString &statement)
  * @param localeName
  * @return void
  */
-static void configureCollation(QSqlDatabase &database, QString &localeName)
+static void configureCollation(QSqlDatabase &database)
 {
-    const QString cLocaleName(QString::fromLatin1("C"));
+    const QString localeName = QLocale().name();
+    const QString statement(QString::fromLatin1("SELECT icu_load_collation('%1', 'localeCollation')"));
 
-    if(localeName != cLocaleName)
+    if(!execute(database, statement.arg(localeName)))
     {
-        const QString statement(QString::fromLatin1("SELECT icu_load_collation('%1', 'localeCollation')"));
-
-        if(!execute(database, statement.arg(localeName)))
-        {
-            qDebug() << QString("Failed to configure collation for locale %1 :\n%2")
-                        .arg(localeName)
-                        .arg(database.lastError().text());
-
-            localeName = cLocaleName;
-        }
+        qDebug() << QString("Failed to configure collation for locale %1 :\n%2")
+                    .arg(localeName)
+                    .arg(database.lastError().text());
     }
 }
 
@@ -340,7 +343,7 @@ static void configureCollation(QSqlDatabase &database, QString &localeName)
  * @param localeName
  * @return bool
  */
-static bool configureDatabase(QSqlDatabase &database, QString &localeName)
+static bool configureDatabase(QSqlDatabase &database)
 {
     bool r = false;
 
@@ -355,7 +358,7 @@ static bool configureDatabase(QSqlDatabase &database, QString &localeName)
     else
     {
         r = true;
-        configureCollation(database, localeName);
+        configureCollation(database);
     }
 
     return r;
@@ -399,11 +402,11 @@ static bool createDatabase(QSqlDatabase &database)
  * @param localeName
  * @return bool
  */
-static bool prepareDatabase(QSqlDatabase &database, QString &localeName)
+static bool prepareDatabase(QSqlDatabase &database)
 {
     bool r = false;
 
-    if(configureDatabase(database, localeName) && createDatabase(database))
+    if(configureDatabase(database) && createDatabase(database))
         r = true;
 
     return r;
@@ -411,7 +414,7 @@ static bool prepareDatabase(QSqlDatabase &database, QString &localeName)
 
 
 
-Storage::Storage() : m_localeName(QLocale().name())
+Storage::Storage()
 {
 }
 
@@ -471,7 +474,7 @@ bool Storage::openDB()
             // The database file can be opened... But did it already exist ?
             if(!db_exists)  // If it didn't exist, we have to prepare it (configure + create tables, views and triggers)
             {
-                if(!prepareDatabase(this->m_db, this->m_localeName))
+                if(!prepareDatabase(this->m_db))
                 {
                     r = false;
                     this->m_db.close();
@@ -486,7 +489,7 @@ bool Storage::openDB()
             }
             else            // If it did already exist, we still have to configure it.
             {
-                if(!configureDatabase(this->m_db, this->m_localeName))
+                if(!configureDatabase(this->m_db))
                 {
                     r = false;
                     this->m_db.close();
@@ -516,13 +519,4 @@ bool Storage::openDB()
 bool Storage::isOpen()
 {
     return this->m_db.isOpen();
-}
-
-/**
- * @brief Storage::isLocalized
- * @return
- */
-bool Storage::isLocalized()
-{
-    return (this->m_localeName != QLatin1String("C"));
 }

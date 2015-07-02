@@ -52,6 +52,9 @@ int main(int argc, char *argv[])
     //view->rootContext()->setContextProperty("foldersModel", foldersModel);
     //view->rootContext()->setContextObject(controller);
 
+    Storage *storage = new Storage();
+    storage->openDB();
+
     qmlRegisterType<FoldersModel>("org.kubler.Reminders", 1, 0, "FoldersModel");
 
     view->setSource(SailfishApp::pathTo("qml/Reminders.qml"));

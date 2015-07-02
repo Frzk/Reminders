@@ -25,14 +25,12 @@ class Storage
 
         bool openDB();
         bool isOpen();
-        bool isLocalized();
 
         operator QSqlDatabase &();
         operator QSqlDatabase const &() const;
 
     private:
-        QSqlDatabase m_db;
-        QString m_localeName;
+        QSqlDatabase    m_db;
 };
 
 #endif // REMINDERSSTORAGE_H
