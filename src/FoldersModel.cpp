@@ -13,7 +13,7 @@ const QString FoldersModel::QUERY =
 FoldersModel::FoldersModel(QObject *parent) : QSqlQueryModel(parent)
 {
     this->m_storage = new Storage();
-    this->refresh();
+    //this->refresh();
 }
 
 FoldersModel::~FoldersModel()
@@ -49,11 +49,14 @@ QVariant FoldersModel::data(const QModelIndex &index, int role) const
 
 void FoldersModel::refresh()
 {
-    if(this->m_storage->openDB())
-    {
-        if(this->m_storage->isLocalized())
-            this->setQuery(QUERY.arg("COLLATE localeCollation "), *this->m_storage);
-        else
-            this->setQuery(QUERY, *this->m_storage);
-    }
+    //FIXME: seems weird:
+    if(!this->m_storage->isOpen())
+        this->m_storage->openDB();
+
+    if(this->m_storage->isLocalized())
+        this->setQuery(QUERY.arg("COLLATE localeCollation "), *this->m_storage);
+    else
+        this->setQuery(QUERY, *this->m_storage);
+
+    qDebug() << QString("FoldersModel refreshed !");
 }

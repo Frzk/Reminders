@@ -47,10 +47,12 @@ int main(int argc, char *argv[])
 
     //Storage *storage = new Storage();
     //ProjectsModel *foldersModel = new ProjectsModel();
-    FoldersModel *foldersModel = new FoldersModel();
+    //FoldersModel *foldersModel = new FoldersModel();
 
-    view->rootContext()->setContextProperty("foldersModel", foldersModel);
+    //view->rootContext()->setContextProperty("foldersModel", foldersModel);
     //view->rootContext()->setContextObject(controller);
+
+    qmlRegisterType<FoldersModel>("org.kubler.Reminders", 1, 0, "FoldersModel");
 
     view->setSource(SailfishApp::pathTo("qml/Reminders.qml"));
     view->showFullScreen();

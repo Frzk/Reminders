@@ -13,9 +13,11 @@ class FoldersModel : public QSqlQueryModel
         explicit FoldersModel(QObject *parent = 0);
         ~FoldersModel();
 
+        // QSqlQueryModel :
         QVariant                data(const QModelIndex &index, int role = Qt::DisplayRole) const;
         QHash<int, QByteArray>  roleNames() const;
 
+        // QML API :
         Q_INVOKABLE void        refresh();
 
     signals:
