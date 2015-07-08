@@ -108,7 +108,7 @@ Dialog {
 
             onValueChanged: console.log("New priority: ", value)
         }
-
+/*
         ValueButton {
             id: status
 
@@ -119,12 +119,12 @@ Dialog {
             value: qsTr("Pending")
             enabled: false
         }
-
+*/
         ValueButton {
             id: project
 
             anchors {
-                top: status.bottom
+                top: priority.bottom
             }
             label: qsTr("Project")
             value: qsTr("No project")
@@ -139,91 +139,14 @@ Dialog {
             }
         }
 
-/*
-        ValueButton {
-            id: dueDate
-
-            property bool _menuOpen: dueDateContextMenu !== null && dueDateContextMenu.parent === dueDate
-            property variant _newDate       // Instance of Date Object shared between the DatePicker and TimePicker.
-            property variant valueObject    // This is the real value, the one that will be stored in the database.
-                                            // The built-in value property is only suitable for displaying purpose.
+        DateTimePicker {
+            id: dateTimePicker
 
             anchors {
                 top: project.bottom
             }
-            height: contentItem.height + (_menuOpen ? dueDateContextMenu.height : 0)
-            label: value ? qsTr("Due for") : qsTr("Set a due date")
-            value: taskModel.due ? Utils.formatDatetime(taskModel.due) : ""
-
-            DatePickerDialog {
-                id: datePicker
-
-                acceptDestination: timePicker
-                acceptDestinationAction: PageStackAction.Push
-
-                onAccepted: {
-                    dueDate._newDate = date;
-                }
-
-                onOpened: {
-                    if(dueDate.valueObject)
-                        datePicker.date = dueDate.valueObject
-                }
-            }
-
-            TimePickerDialog {
-                id: timePicker
-
-                property alias d: dueDate._newDate
-
-                acceptDestination: dialog
-                acceptDestinationAction: PageStackAction.Pop
-
-                onAccepted: {
-                    dueDate.valueObject = new Date(d.getFullYear(), d.getMonth(), d.getDate(), hour, minute)
-                    d = undefined
-                }
-
-                onOpened: {
-                    if(dueDate.valueObject)
-                    {
-                        hour = dueDate.valueObject.getHours()
-                        minute = dueDate.valueObject.getMinutes()
-                    }
-                }
-            }
-
-            ContextMenu {
-                id: dueDateContextMenu
-
-                MenuItem {
-                    text: qsTr("Remove due date")
-                    onClicked: {
-                        dueDateRemorse.execute(dueDate, qsTr("Removing due date"), function() {
-                            dueDate.valueObject = null
-                        }, 3000)
-                    }
-                }
-            }
-
-            RemorseItem {
-                id: dueDateRemorse
-            }
-
-            onClicked: {
-                pageStack.push(datePicker)
-            }
-
-            onPressAndHold: {
-                if(valueObject)
-                    dueDateContextMenu.show(dueDate)
-            }
-
-            onValueObjectChanged: {
-                value = Utils.formatDatetime(valueObject)
-            }
         }
-
+/*
         ValueButton
         {
             id: waitDate
