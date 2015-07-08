@@ -37,6 +37,7 @@
 
 #include "FoldersModel.h"
 #include "ProjectsModel.h"
+#include "FilterProjectsModel.h"
 
 int main(int argc, char *argv[])
 {
@@ -57,7 +58,7 @@ int main(int argc, char *argv[])
     storage->openDB();
 
     qmlRegisterType<FoldersModel>("org.kubler.Reminders", 1, 0, "FoldersModel");
-    qmlRegisterType<ProjectsModel>("org.kubler.Reminders", 1, 0, "ProjectsModel");
+    qmlRegisterType<FilterProjectsModel>("org.kubler.Reminders", 1, 0, "ProjectsModel");
 
     view->setSource(SailfishApp::pathTo("qml/Reminders.qml"));
     view->showFullScreen();
