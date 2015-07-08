@@ -32,134 +32,128 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
+import org.kubler.Reminders 1.0
+
 
 Dialog {
     id: projectDialog
 
+    property Item selectedItem: null
+    property string project: selectedItem ? selectedItem.text : ""
 
-    property string projectName: projectsList.headerItem.newProject.checked ? projectsList.headerItem.newProject.text : projectsList.selectedValue
+    canAccept: selectedItem
 
+    Column {
+        id: headerContainer
 
-    canAccept: projectName !== ""
+        property alias searchField: searchField
 
+        width: projectDialog.width
+
+        DialogHeader {
+            id: dialogHeader
+
+            acceptText: project
+        }
+
+        SearchField {
+            id: searchField
+
+            placeholderText: projectsList.count > 0 ? qsTr("Search") : qsTr("Create a new project")
+            width: parent.width
+
+            onTextChanged: {
+                selectedItem = null
+                projectsModel.setFilterFixedString(text.trim())
+            }
+        }
+
+        BackgroundItem {
+            id: newProject
+
+            property alias text: searchField.text
+
+            visible: ! (searchField.text === "" || (projectsList.count === 1 && searchField.text.toLocaleLowerCase() === projectsModel.get(0).project.toLocaleLowerCase()))
+
+            Row {
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: Theme.paddingMedium
+                x: searchField.textLeftMargin - icon.width - spacing
+
+                Image {
+                    id: icon
+
+                    height: label.height
+                    source: "image://theme/icon-m-add"
+                    width: height
+                }
+
+                Label {
+                    id: label
+
+                    color: newProject.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                    textFormat: Text.StyledText
+                    text: qsTr("%1 (new project)").arg(Theme.highlightText(searchField.text, searchField.text, Theme.highlightColor))
+                }
+            }
+
+            onClicked: {
+                selectedItem = this
+            }
+        }
+    }
+
+    ProjectsModel {
+        id: projectsModel
+    }
 
     SilicaListView
     {
         id: projectsList
 
-        property Item selectedItem: null
-        property string selectedValue: selectedItem ? selectedItem.text : ""
-
-        onSelectedItemChanged: {
-            console.log(selectedItem)
-        }
-
         anchors.fill: parent
         currentIndex: -1
-        delegate: TextSwitch {
-            checked: false
-            text: Theme.highlightText(project, projectsList.headerItem.search.text, Theme.highlightColor)
+        delegate: BackgroundItem {
+            id: backgroundItem
 
-            onCheckedChanged: {
-                if(checked)
-                {
-                    if(projectsList.selectedItem)
-                        projectsList.selectedItem.checked = false
+            property string text: project
 
-                    projectsList.selectedItem = this
-                }
-                else
-                {
-                    projectsList.selectedItem = null
-                }
+            Label {
+                id: label
+
+                anchors.verticalCenter: parent.verticalCenter
+                color: searchField.text.length > 0 ? (highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor)
+                                                   : (highlighted ? Theme.highlightColor : Theme.primaryColor)
+                textFormat: Text.StyledText
+                text: Theme.highlightText(project, searchField.text, Theme.highlightColor)
+                x: searchField.textLeftMargin
+            }
+
+            ListView.onAdd: AddAnimation {
+                target: backgroundItem
+            }
+
+            ListView.onRemove: RemoveAnimation {
+                target: backgroundItem
+            }
+
+            onClicked: {
+                selectedItem = this
             }
         }
-        header: Column {
+        header: Item {
+            id: header
 
-            property alias search: search
-            property alias newProject: newProject
+            height: headerContainer.height
+            width: headerContainer.width
 
-            width: parent.width
-
-            DialogHeader {
-                id: dialogHeader
-
-                acceptText: projectName
-            }
-
-            SearchField {
-                id: search
-
-                width: parent.width
-
-                onTextChanged: {
-                    model.update(text)
-                }
-            }
-
-            TextSwitch {
-                id: newProject
-
-                description: checked ? "" : qsTr("Check to create this project.")
-                height: Theme.itemSizeMedium
-                text: search.text
-                visible: search.text !== ""
+            Component.onCompleted: {
+                headerContainer.parent = header
             }
         }
-        model: ListModel {
-            id: model
-
-            property var projects: ["Testing", "Home", "Reminders", "StrasbourgParking", "Helmo", "SprayGallery"]
-
-            function update(terms)
-            {
-                clear();
-                for(var i=0 ; i<projects.length ; i++)
-                {
-                    if(terms === "" || projects[i].toLowerCase().indexOf(terms.toLowerCase()) >= 0)
-                        append({ project: projects[i] })
-                }
-            }
-
-            Component.onCompleted: update("")
-        }
+        model: projectsModel
 
 
         VerticalScrollDecorator {}
-    }
-
-    Binding {
-        property: "checked"
-        target: projectsList.headerItem.newProject
-        value: projectsList.count === 0 && projectsList.headerItem.search.text !== 0
-    }
-
-    Binding {
-        property: "enabled"
-        target: projectsList.headerItem.newProject
-        value: projectsList.count !== 1 || projectsList.headerItem.search.text !== model.get(0).project
-    }
-
-    //FIXME
-    //  When we have an exact match,
-    //  modify the model and set selected=true for the corresponding item.
-    //  Setting selected=true will trigger an "onCheckedChanged" that will unselect all other items.
-    //  This will set projectsList.selectedItem, and projectsList.selectedValue.
-    //  At least, it will set projectDialog.projectName.
-    /*
-    Binding {
-        property: "selected"
-        target: model.get(0)
-        value: projectsList.count === 1 && projectsList.headerItem.search.text === model.get(0).project
-    }
-    */
-
-
-    onAccepted: {
-        //FIXME
-    }
-
-    Component.onCompleted: {
-        console.log(projectsList.contentItem.children[1].children[3])
     }
 }

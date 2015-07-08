@@ -19,12 +19,16 @@ CONFIG += sailfishapp \
 QT += sql
 
 HEADERS += \
+    src/FilterProjectsModel.h \
     src/FoldersModel.h \
+    src/ProjectsModel.h \
     src/Storage.h
 
 SOURCES += src/Reminders.cpp \
+    src/FilterProjectsModel.cpp \
     src/FoldersModel.cpp \
-    src/Storage.cpp
+    src/ProjectsModel.cpp \
+    src/Storage.cpp \
 
 OTHER_FILES += \
     qml/Reminders.qml \
