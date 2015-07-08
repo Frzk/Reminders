@@ -47,6 +47,4 @@ QVariant FoldersModel::data(const QModelIndex &index, int role) const
 void FoldersModel::refresh()
 {
     this->setQuery("SELECT project, nb, category FROM folders ORDER BY project COLLATE localeCollation ASC");
-
-    qDebug() << QString("FoldersModel refreshed !");
 }
