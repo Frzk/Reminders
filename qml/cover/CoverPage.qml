@@ -28,41 +28,27 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <QGuiApplication>
-#include <QQuickView>
-#include <QtQuick>
+import QtQuick 2.0
+import Sailfish.Silica 1.0
 
-#include <sailfishapp.h>
-#include "Storage.h"
+CoverBackground {
+    Label {
+        id: label
+        anchors.centerIn: parent
+        text: qsTr("My Cover")
+    }
 
-#include "FoldersModel.h"
-#include "ProjectsModel.h"
-#include "FilterProjectsModel.h"
+    CoverActionList {
+        id: coverAction
 
-int main(int argc, char *argv[])
-{
-    QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
-    app->setOrganizationName("org.kubler");
-    app->setApplicationName("Reminders");
+        CoverAction {
+            iconSource: "image://theme/icon-cover-next"
+        }
 
-    QScopedPointer<QQuickView> view(SailfishApp::createView());
-
-    //Storage *storage = new Storage();
-    //ProjectsModel *foldersModel = new ProjectsModel();
-    //FoldersModel *foldersModel = new FoldersModel();
-
-    //view->rootContext()->setContextProperty("foldersModel", foldersModel);
-    //view->rootContext()->setContextObject(controller);
-
-    Storage *storage = new Storage();
-    storage->openDB();
-
-    qmlRegisterType<FoldersModel>("org.kubler.Reminders", 1, 0, "FoldersModel");
-    qmlRegisterType<FilterProjectsModel>("org.kubler.Reminders", 1, 0, "ProjectsModel");
-
-    view->setSource(SailfishApp::pathTo("qml/Reminders.qml"));
-    view->showFullScreen();
-
-    return app->exec();
+        CoverAction {
+            iconSource: "image://theme/icon-cover-pause"
+        }
+    }
 }
+
 

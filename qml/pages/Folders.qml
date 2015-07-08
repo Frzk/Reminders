@@ -28,41 +28,50 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <QGuiApplication>
-#include <QQuickView>
-#include <QtQuick>
+import QtQuick 2.0
+import Sailfish.Silica 1.0
 
-#include <sailfishapp.h>
-#include "Storage.h"
+import "../components"
+import "../pragma/Helpers.js" as Helpers
 
-#include "FoldersModel.h"
-#include "ProjectsModel.h"
-#include "FilterProjectsModel.h"
 
-int main(int argc, char *argv[])
-{
-    QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
-    app->setOrganizationName("org.kubler");
-    app->setApplicationName("Reminders");
+Page {
+    id: page
 
-    QScopedPointer<QQuickView> view(SailfishApp::createView());
+    SilicaListView {
+        anchors.fill: parent
+        delegate: FolderDelegate {}
+        header: PageHeader {
+            title: qsTr("Reminders")
+        }
+        model: foldersModel
+        section {
+            criteria: ViewSection.FullString
+            delegate: SectionHeader {
+                font {
+                    capitalization: Font.Capitalize
+                }
+                text: Helpers.i18nCategory(section)
+            }
+            property: 'category'
+        }
 
-    //Storage *storage = new Storage();
-    //ProjectsModel *foldersModel = new ProjectsModel();
-    //FoldersModel *foldersModel = new FoldersModel();
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Add a Reminder...")
+            }
+        }
 
-    //view->rootContext()->setContextProperty("foldersModel", foldersModel);
-    //view->rootContext()->setContextObject(controller);
+        VerticalScrollDecorator {}
+    }
 
-    Storage *storage = new Storage();
-    storage->openDB();
-
-    qmlRegisterType<FoldersModel>("org.kubler.Reminders", 1, 0, "FoldersModel");
-    qmlRegisterType<FilterProjectsModel>("org.kubler.Reminders", 1, 0, "ProjectsModel");
-
-    view->setSource(SailfishApp::pathTo("qml/Reminders.qml"));
-    view->showFullScreen();
-
-    return app->exec();
+    /*
+    //FIXME:
+    onStatusChanged: {
+        if(status === PageStatus.Active)
+        {
+            foldersModel.refresh();
+        }
+    }
+    */
 }
-

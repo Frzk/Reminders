@@ -28,41 +28,36 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <QGuiApplication>
-#include <QQuickView>
-#include <QtQuick>
+import QtQuick 2.0
+import Sailfish.Silica 1.0
 
-#include <sailfishapp.h>
-#include "Storage.h"
-
-#include "FoldersModel.h"
-#include "ProjectsModel.h"
-#include "FilterProjectsModel.h"
-
-int main(int argc, char *argv[])
+Rectangle
 {
-    QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
-    app->setOrganizationName("org.kubler");
-    app->setApplicationName("Reminders");
+    property alias tag: label.text
+    property color tagcolor: Theme.secondaryColor
+    /*
+    border {
+        color: tagcolor
+        width: 1
+    }
+    */
+    color: Qt.rgba(255, 255, 255, 0.1)
+    height: label.height + 2 * Theme.paddingSmall
+    radius: 9
+    width: label.width + 2 * Theme.paddingMedium
 
-    QScopedPointer<QQuickView> view(SailfishApp::createView());
+    Label
+    {
+        id: label
 
-    //Storage *storage = new Storage();
-    //ProjectsModel *foldersModel = new ProjectsModel();
-    //FoldersModel *foldersModel = new FoldersModel();
-
-    //view->rootContext()->setContextProperty("foldersModel", foldersModel);
-    //view->rootContext()->setContextObject(controller);
-
-    Storage *storage = new Storage();
-    storage->openDB();
-
-    qmlRegisterType<FoldersModel>("org.kubler.Reminders", 1, 0, "FoldersModel");
-    qmlRegisterType<FilterProjectsModel>("org.kubler.Reminders", 1, 0, "ProjectsModel");
-
-    view->setSource(SailfishApp::pathTo("qml/Reminders.qml"));
-    view->showFullScreen();
-
-    return app->exec();
+        anchors {
+            centerIn: parent
+        }
+        color: tagcolor
+        font {
+            capitalization: Font.AllLowercase
+            pixelSize: Theme.fontSizeExtraSmall
+        }
+        text: ""
+    }
 }
-

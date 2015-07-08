@@ -12,28 +12,39 @@
 # The name of your application
 TARGET = harbour-reminders
 
-CONFIG += sailfishapp
+CONFIG += sailfishapp \
+    sailfishapp_i18n \
+    c++11
 
-SOURCES += src/Reminders.cpp
+QT += sql
 
-OTHER_FILES += qml/Reminders.qml \
-    qml/models/FoldersModel.qml \
+HEADERS += \
+    src/FoldersModel.h \
+    src/Storage.h \
+    src/ProjectsModel.h
+
+SOURCES += src/Reminders.cpp \
+    src/FoldersModel.cpp \
+    src/Storage.cpp \
+    src/ProjectsModel.cpp
+
+OTHER_FILES += \
+    qml/Reminders.qml \
     qml/cover/CoverPage.qml \
     qml/components/FolderDelegate.qml \
+    qml/components/ReminderDelegate.qml \
+    qml/components/Tag.qml \
     qml/pages/Folders.qml \
+    qml/pages/ProjectPickerDialog.qml \
+    qml/pages/Reminder.qml \
+    qml/pages/Reminders.qml \
+    qml/pages/ReminderEditor.qml \
+    qml/pragma/Helpers.js \
     rpm/$${TARGET}.changes.in \
     rpm/$${TARGET}.spec \
     rpm/$${TARGET}.yaml \
     $${TARGET}.desktop
 
 
-# to disable building translations every time, comment out the
-# following CONFIG line
-CONFIG += sailfishapp_i18n
 
-# German translation is enabled as an example. If you aren't
-# planning to localize your app, remember to comment out the
-# following TRANSLATIONS line. And also do not forget to
-# modify the localized app name in the the .desktop file.
 #TRANSLATIONS += translations/harbour-reminders-de.ts
-
