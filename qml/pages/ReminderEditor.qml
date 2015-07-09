@@ -145,6 +145,8 @@ Dialog {
             anchors {
                 top: project.bottom
             }
+            dateLabel: qsTr("Due date")
+            timeLabel: qsTr("Due time")
         }
 /*
         ValueButton

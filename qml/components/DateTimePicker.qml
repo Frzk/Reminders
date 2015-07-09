@@ -38,20 +38,41 @@ import "../pragma/Helpers.js" as Helpers
 Column {
     id: root
 
-    property date datetimeObj
-    property date dateObj
-    property date timeObj
+    property date datetimeObj       //
+    property date dateObj           //
+    property date timeObj           //
+
+    property string dateLabel: ""
+    property string timeLabel: ""
+
 
     anchors {
         left: parent.left
         right: parent.right
     }
 
+
     ValueButton {
         id: datePicker
 
-        label: Date.parse(dateObj) ? qsTr("Due date") : qsTr("Set a due date")
-        value: Helpers.formatDateOnly(dateObj)
+        property bool menuOpen: dateContextMenu != null && dateContextMenu.parent === datePicker
+
+        height: contentItem.height + (menuOpen ? dateContextMenu.height : 0)
+        highlighted: down && !menuOpen
+        label: dateLabel
+        labelColor: highlighted ? Theme.highlightColor : Theme.primaryColor
+        value: Date.parse(dateObj) ? Helpers.formatDateOnly(dateObj) : qsTr("Not set")
+
+        ContextMenu {
+            id: dateContextMenu
+
+            MenuItem {
+                text: Date.parse(timeObj) ? qsTr("Unset due date (and due time)") : qsTr("Unset due date")
+                onClicked: {
+                    dateObj = new Date("invalid")
+                }
+            }
+        }
 
         onClicked: {
             var picker = pageStack.push("Sailfish.Silica.DatePickerDialog", { date: new Date() })
@@ -60,14 +81,35 @@ Column {
                 dateObj = picker.date
             });
         }
+
+        onPressAndHold: {
+            if(Date.parse(dateObj))
+                dateContextMenu.show(datePicker)
+        }
     }
 
     ValueButton {
         id: timePicker
 
-        label: Date.parse(timeObj) ? qsTr("Due time") : qsTr("Set a due time")
-        value: Helpers.formatTimeOnly(timeObj)
+        property bool menuOpen: timeContextMenu != null && timeContextMenu.parent === timePicker
+
+        height: contentItem.height + (menuOpen ? timeContextMenu.height : 0)
+        highlighted: down && !menuOpen
+        label: timeLabel
+        labelColor: highlighted ? Theme.highlightColor : Theme.primaryColor
+        value: Date.parse(timeObj) ? Helpers.formatTimeOnly(timeObj) : qsTr("Not set")
         visible: Date.parse(dateObj)
+
+        ContextMenu {
+            id: timeContextMenu
+
+            MenuItem {
+                text: qsTr("Unset due time")
+                onClicked: {
+                    timeObj = new Date("invalid")
+                }
+            }
+        }
 
         onClicked: {
             var picker = pageStack.push("Sailfish.Silica.TimePickerDialog", { date: new Date() })
@@ -76,10 +118,10 @@ Column {
                 timeObj = picker.time
             });
         }
-    }
 
-    Component.onCompleted: {
-        console.log(dateObj);
-        console.log(timeObj);
+        onPressAndHold: {
+            if(Date.parse(timeObj))
+                timeContextMenu.show(timePicker)
+        }
     }
 }

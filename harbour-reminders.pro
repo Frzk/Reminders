@@ -33,6 +33,7 @@ SOURCES += src/Reminders.cpp \
 OTHER_FILES += \
     qml/Reminders.qml \
     qml/cover/CoverPage.qml \
+    qml/components/DateTimePicker.qml \
     qml/components/FolderDelegate.qml \
     qml/components/ReminderDelegate.qml \
     qml/components/Tag.qml \
