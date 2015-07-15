@@ -59,7 +59,7 @@ Dialog {
         SearchField {
             id: searchField
 
-            placeholderText: projectsList.count > 0 ? qsTr("Search") : qsTr("Create a new project")
+            placeholderText: projectsList.count > 0 ? qsTr("Search projects") : qsTr("Create a new project")
             width: parent.width
 
             onTextChanged: {
@@ -122,8 +122,7 @@ Dialog {
                 id: label
 
                 anchors.verticalCenter: parent.verticalCenter
-                color: searchField.text.length > 0 ? (highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor)
-                                                   : (highlighted ? Theme.highlightColor : Theme.primaryColor)
+                color: highlighted ? Theme.highlightColor : Theme.primaryColor
                 textFormat: Text.StyledText
                 text: Theme.highlightText(project, searchField.text, Theme.highlightColor)
                 x: searchField.textLeftMargin
@@ -155,5 +154,9 @@ Dialog {
 
 
         VerticalScrollDecorator {}
+    }
+
+    Component.onCompleted: {
+        searchField.forceActiveFocus()
     }
 }
