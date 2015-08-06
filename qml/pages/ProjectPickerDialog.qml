@@ -59,7 +59,7 @@ Dialog {
         SearchField {
             id: searchField
 
-            placeholderText: projectsList.count > 0 ? qsTr("Search projects") : qsTr("Create a new project")
+            placeholderText: qsTr("Project name")
             width: parent.width
 
             onTextChanged: {
@@ -76,24 +76,36 @@ Dialog {
             visible: ! (searchField.text === "" || (projectsList.count === 1 && searchField.text.toLocaleLowerCase() === projectsModel.get(0).project.toLocaleLowerCase()))
 
             Row {
-                anchors.verticalCenter: parent.verticalCenter
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                }
                 spacing: Theme.paddingMedium
                 x: searchField.textLeftMargin - icon.width - spacing
 
                 Image {
                     id: icon
 
-                    height: label.height
+                    height: lblProject.height
                     source: "image://theme/icon-m-add"
                     width: height
                 }
 
                 Label {
-                    id: label
+                    id: lblProject
+
+                    property double maxWidth: newProject.width - searchField.textLeftMargin - (parent.spacing * 4) - lblNew.width
+
+                    color: newProject.highlighted ? Theme.highlightColor : Theme.primaryColor
+                    text: searchField.text
+                    truncationMode: TruncationMode.Fade
+                    width: paintedWidth > maxWidth ? maxWidth : paintedWidth
+                }
+
+                Label {
+                    id: lblNew
 
                     color: newProject.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
-                    textFormat: Text.StyledText
-                    text: qsTr("%1 (new project)").arg(Theme.highlightText(searchField.text, searchField.text, Theme.highlightColor))
+                    text: qsTr("(new)")
                 }
             }
 
@@ -119,7 +131,7 @@ Dialog {
             property string text: project
 
             Label {
-                id: label
+                id: lbl
 
                 anchors.verticalCenter: parent.verticalCenter
                 color: highlighted ? Theme.highlightColor : Theme.primaryColor
