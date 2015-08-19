@@ -31,6 +31,8 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
+import org.kubler.Reminders 1.0
+
 import "../components"
 import "../pragma/Helpers.js" as Helpers
 
@@ -38,13 +40,17 @@ import "../pragma/Helpers.js" as Helpers
 Page {
     id: page
 
+    property string project
+
     SilicaListView {
         anchors.fill: parent
         delegate: FolderDelegate {}
         header: PageHeader {
             title: qsTr("Reminders")
         }
-        model: foldersModel
+        model: FoldersModel {
+            id: foldersModel
+        }
         section {
             criteria: ViewSection.FullString
             delegate: SectionHeader {
@@ -60,12 +66,23 @@ Page {
             MenuItem {
                 text: qsTr("Add a Reminder...")
             }
+            MenuItem {
+                text: "Reminder view"
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("Reminder.qml"))
+                }
+            }
+            MenuItem {
+                text: "Reminder editor"
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("ReminderEditor.qml"))
+                }
+            }
         }
 
         VerticalScrollDecorator {}
     }
 
-    /*
     //FIXME:
     onStatusChanged: {
         if(status === PageStatus.Active)
@@ -73,5 +90,4 @@ Page {
             foldersModel.refresh();
         }
     }
-    */
 }

@@ -11,6 +11,7 @@ enum Roles {
 
 ProjectsModel::ProjectsModel(QObject *parent) : QSqlQueryModel(parent)
 {
+    this->refresh();
 }
 
 ProjectsModel::~ProjectsModel()
