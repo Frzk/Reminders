@@ -31,33 +31,110 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-Rectangle
-{
-    property alias tag: label.text
-    property color tagcolor: Theme.secondaryColor
-    /*
-    border {
-        color: tagcolor
-        width: 1
-    }
-    */
-    color: Qt.rgba(255, 255, 255, 0.1)
-    height: label.height + 2 * Theme.paddingSmall
-    radius: 9
-    width: label.width + 2 * Theme.paddingMedium
+/**
+ * The default Tag is a Label with a transparent background and a Theme.primaryColor color.
+ *
+ * When enabled, a Tag can be selected or deselected.
+ *
+ * If enabled and selected :
+ *     The background is shown,
+ *     The label color is Theme.highlightColor.
+ *
+ * If not enabled and selected : (typically, when you just want to display a list of Tags)
+ *     The background is shown,
+ *     The label color is Theme.primaryColor.
+ *
+ * If unselected (regardless of enabled) :
+ *     The background is transparent,
+ *     The label color is Theme.primaryColor.
+ *
+ */
 
-    Label
-    {
+Rectangle {
+    id: root
+
+    property alias enabled: mousearea.enabled
+    property alias fontSize: label.font.pixelSize
+    property alias highlighted: mousearea.pressed
+    property alias tag: label.text
+    property bool selected: true
+
+    color: "transparent"
+    height: label.height + Theme.paddingSmall * 2
+    radius: 9
+    width: label.width + Theme.paddingLarge * 2
+
+    MouseArea {
+        id: mousearea
+
+        anchors {
+            fill: parent
+        }
+
+        onClicked: {
+            selected = !selected
+        }
+    }
+
+    Label {
         id: label
 
         anchors {
             centerIn: parent
         }
-        color: tagcolor
+        color: Theme.primaryColor
         font {
-            capitalization: Font.AllLowercase
+            //capitalization: Font.AllLowercase
             pixelSize: Theme.fontSizeExtraSmall
         }
-        text: ""
     }
+
+    states: [
+        State {
+            name: "SELECTED_ENABLED"
+            when: root.selected && root.enabled
+
+            PropertyChanges {
+                color: Theme.rgba(Theme.highlightBackgroundColor, 0.15)
+                target: root
+            }
+
+            PropertyChanges {
+                color: Theme.highlightColor
+                target: label
+            }
+        },
+
+        State {
+            name: "SELECTED_DISABLED"
+            extend: "SELECTED_ENABLED"
+            when: root.selected && !root.enabled
+
+            PropertyChanges {
+                color: Theme.primaryColor
+                target: label
+            }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            reversible: true
+            to: "*"
+
+            ParallelAnimation {
+                ColorAnimation {
+                    duration: 100
+                    easing.type: Easing.InOutQuad
+                    target: root
+                }
+
+                ColorAnimation {
+                    duration: 100
+                    easing.type: Easing.InOutQuad
+                    target: label
+                }
+            }
+        }
+    ]
 }
