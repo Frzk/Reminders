@@ -19,16 +19,21 @@ CONFIG += sailfishapp \
 QT += sql
 
 HEADERS += \
-    src/FilterProjectsModel.h \
+    src/FilterProperty.h \
     src/FoldersModel.h \
     src/ProjectsModel.h \
+    src/SortFilterModel.h \
+    src/SortProperty.h \
     src/Storage.h
 
 SOURCES += src/Reminders.cpp \
-    src/FilterProjectsModel.cpp \
+    src/FilterProperty.cpp
     src/FoldersModel.cpp \
     src/ProjectsModel.cpp \
-    src/Storage.cpp \
+    src/SortFilterModel.cpp \
+    src/SortProperty.cpp \
+    src/Storage.cpp
+
 
 OTHER_FILES += \
     qml/Reminders.qml \
@@ -46,7 +51,8 @@ OTHER_FILES += \
     rpm/$${TARGET}.changes.in \
     rpm/$${TARGET}.spec \
     rpm/$${TARGET}.yaml \
-    $${TARGET}.desktop
+    $${TARGET}.desktop \
+    qml/components/TagPicker.qml
 
 
 

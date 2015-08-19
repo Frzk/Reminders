@@ -64,7 +64,6 @@ Dialog {
 
             onTextChanged: {
                 selectedItem = null
-                projectsModel.setFilterFixedString(text.trim())
             }
         }
 
@@ -73,7 +72,9 @@ Dialog {
 
             property alias text: searchField.text
 
-            visible: ! (searchField.text === "" || (projectsList.count === 1 && searchField.text.toLocaleLowerCase() === projectsModel.get(0).project.toLocaleLowerCase()))
+            visible: ! (searchField.text === ""
+                        || (projectsList.count === 1
+                            && searchField.text.toLocaleLowerCase() === filteredProjectsModel.get(0).project.toLocaleLowerCase()))
 
             Row {
                 anchors {
@@ -119,6 +120,16 @@ Dialog {
         id: projectsModel
     }
 
+    SortFilterModel {
+        id: filteredProjectsModel
+
+        filter {
+            property: "project"
+            value: searchField.text
+        }
+        model: projectsModel
+    }
+
     SilicaListView
     {
         id: projectsList
@@ -162,7 +173,7 @@ Dialog {
                 headerContainer.parent = header
             }
         }
-        model: projectsModel
+        model: filteredProjectsModel
 
 
         VerticalScrollDecorator {}
