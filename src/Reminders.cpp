@@ -35,9 +35,9 @@
 #include <sailfishapp.h>
 #include "Storage.h"
 
+#include "SortFilterModel.h"
 #include "FoldersModel.h"
 #include "ProjectsModel.h"
-#include "FilterProjectsModel.h"
 
 int main(int argc, char *argv[])
 {
@@ -47,18 +47,15 @@ int main(int argc, char *argv[])
 
     QScopedPointer<QQuickView> view(SailfishApp::createView());
 
-    //Storage *storage = new Storage();
-    //ProjectsModel *foldersModel = new ProjectsModel();
-    //FoldersModel *foldersModel = new FoldersModel();
-
-    //view->rootContext()->setContextProperty("foldersModel", foldersModel);
-    //view->rootContext()->setContextObject(controller);
-
     Storage *storage = new Storage();
     storage->openDB();
 
+    qmlRegisterType<QAbstractItemModel>();
+    qmlRegisterType<FilterProperty>("org.kubler.Reminders", 1, 0, "FilterProperty");
+    qmlRegisterType<SortProperty>("org.kubler.Reminders", 1, 0, "SortProperty");
+    qmlRegisterType<SortFilterModel>("org.kubler.Reminders", 1, 0, "SortFilterModel");
     qmlRegisterType<FoldersModel>("org.kubler.Reminders", 1, 0, "FoldersModel");
-    qmlRegisterType<FilterProjectsModel>("org.kubler.Reminders", 1, 0, "ProjectsModel");
+    qmlRegisterType<ProjectsModel>("org.kubler.Reminders", 1, 0, "ProjectsModel");
 
     view->setSource(SailfishApp::pathTo("qml/Reminders.qml"));
     view->showFullScreen();
