@@ -27,7 +27,7 @@ HEADERS += \
     src/Storage.h
 
 SOURCES += src/Reminders.cpp \
-    src/FilterProperty.cpp
+    src/FilterProperty.cpp \
     src/FoldersModel.cpp \
     src/ProjectsModel.cpp \
     src/SortFilterModel.cpp \
