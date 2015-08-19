@@ -205,6 +205,27 @@ Page {
                 text: qsTr("Tags")
             }
 
+            TagPicker {
+                id: tagPicker
+
+                //enabled: false
+                model: ListModel {
+                    ListElement {
+                        tag: "Testing"
+                    }
+                    ListElement {
+                        tag: "WIP"
+                    }
+                    ListElement {
+                        tag: "UI"
+                    }
+                    ListElement {
+                        tag: "UX"
+                    }
+                }
+            }
+
+            /*
             Flow {
                 id: tagFlow
 
@@ -236,6 +257,8 @@ Page {
                     }
                 }
             }
+            */
+
             SectionHeader {
                 text: qsTr("Dependencies")
             }

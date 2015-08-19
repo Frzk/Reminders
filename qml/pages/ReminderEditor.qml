@@ -86,6 +86,7 @@ Dialog {
 
         SectionHeader {
             id: sectionInformation
+
             anchors {
                 top: description.bottom
             }
@@ -108,34 +109,45 @@ Dialog {
 
             onValueChanged: console.log("New priority: ", value)
         }
-/*
-        ValueButton {
-            id: status
 
-            anchors {
-                top: priority.bottom
-            }
-            label: qsTr("Status")
-            value: qsTr("Pending")
-            enabled: false
-        }
-*/
         ValueButton {
             id: project
 
+            property bool menuOpen: projectContextMenu != null && projectContextMenu.parent === project
+            property string _value
+
             anchors {
                 top: priority.bottom
             }
+            height: contentItem.height + (menuOpen ? projectContextMenu.height : 0)
+            highlighted: down && !menuOpen
             label: qsTr("Project")
-            value: qsTr("No project")
+            labelColor: highlighted ? Theme.highlightColor : Theme.primaryColor
+            value: _value ? _value : qsTr("No project")
+
+            ContextMenu {
+                id: projectContextMenu
+
+                MenuItem {
+                    text: qsTr("Remove project")
+                    onClicked: {
+                        project._value = ""
+                    }
+                }
+            }
 
             onClicked: {
                 var projectPicker = pageStack.push(Qt.resolvedUrl("../pages/ProjectPickerDialog.qml"))
 
                 projectPicker.accepted.connect(function() {
-                    value = projectPicker.project
-                    console.log("New project : ", value)
+                    project._value = projectPicker.project
+                    console.log("New project : ", project._value)
                 })
+            }
+
+            onPressAndHold: {
+                if(_value)
+                    projectContextMenu.show(project)
             }
         }
 
@@ -209,6 +221,16 @@ Dialog {
             }
         }
 */
+        SectionHeader {
+            id: sectionTags
+
+            anchors {
+                top: dateTimePicker.bottom
+            }
+
+            text: qsTr("Tags")
+        }
+
 /*
         BackgroundItem {
             id: tagEditor
