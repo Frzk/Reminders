@@ -50,43 +50,53 @@ import Sailfish.Silica 1.0
  *
  */
 
-Rectangle {
+MouseArea {
     id: root
 
-    property alias enabled: mousearea.enabled
+    property alias color: rect.color
     property alias fontSize: label.font.pixelSize
-    property alias highlighted: mousearea.pressed
+    property alias highlighted: root.pressed
     property alias tag: label.text
     property bool selected: true
 
-    color: "transparent"
     height: label.height + Theme.paddingSmall * 2
-    radius: 9
     width: label.width + Theme.paddingLarge * 2
 
-    MouseArea {
-        id: mousearea
 
-        anchors {
-            fill: parent
-        }
-
-        onClicked: {
-            selected = !selected
-        }
-    }
-
-    Label {
-        id: label
+    Rectangle {
+        id: rect
 
         anchors {
             centerIn: parent
+            fill: parent
         }
-        color: Theme.primaryColor
-        font {
-            //capitalization: Font.AllLowercase
-            pixelSize: Theme.fontSizeExtraSmall
+        color: "transparent"
+        radius: 9
+
+        Label {
+            id: label
+
+            anchors {
+                centerIn: parent
+            }
+            color: Theme.primaryColor
+            font {
+                //capitalization: Font.AllLowercase
+                pixelSize: Theme.fontSizeExtraSmall
+            }
         }
+    }
+
+    onClicked: {
+        selected = !selected
+    }
+
+    ListView.onAdd: AddAnimation {
+        target: root
+    }
+
+    ListView.onRemove: RemoveAnimation {
+        target: root
     }
 
     states: [
@@ -96,7 +106,7 @@ Rectangle {
 
             PropertyChanges {
                 color: Theme.rgba(Theme.highlightBackgroundColor, 0.15)
-                target: root
+                target: rect
             }
 
             PropertyChanges {
@@ -126,7 +136,7 @@ Rectangle {
                 ColorAnimation {
                     duration: 100
                     easing.type: Easing.InOutQuad
-                    target: root
+                    target: rect
                 }
 
                 ColorAnimation {
