@@ -38,6 +38,9 @@
 #include "SortFilterModel.h"
 #include "FoldersModel.h"
 #include "ProjectsModel.h"
+#include "TagsModel.h"
+#include "AnnotationsModel.h"
+#include "VirtualTagsModel.h"
 
 int main(int argc, char *argv[])
 {
@@ -56,10 +59,12 @@ int main(int argc, char *argv[])
     qmlRegisterType<SortFilterModel>("org.kubler.Reminders", 1, 0, "SortFilterModel");
     qmlRegisterType<FoldersModel>("org.kubler.Reminders", 1, 0, "FoldersModel");
     qmlRegisterType<ProjectsModel>("org.kubler.Reminders", 1, 0, "ProjectsModel");
+    qmlRegisterType<TagsModel>("org.kubler.Reminders", 1, 0, "TagsModel");
+    qmlRegisterType<AnnotationsModel>("org.kubler.Reminders", 1, 0, "AnnotationsModel");
+    qmlRegisterType<VirtualTagsModel>("org.kubler.Reminders", 1, 0, "VirtualTagsModel");
 
     view->setSource(SailfishApp::pathTo("qml/Reminders.qml"));
     view->showFullScreen();
 
     return app->exec();
 }
-
