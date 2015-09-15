@@ -62,7 +62,6 @@ MouseArea {
     height: label.height + Theme.paddingSmall * 2
     width: label.width + Theme.paddingLarge * 2
 
-
     Rectangle {
         id: rect
 
@@ -85,10 +84,6 @@ MouseArea {
                 pixelSize: Theme.fontSizeExtraSmall
             }
         }
-    }
-
-    onClicked: {
-        selected = !selected
     }
 
     ListView.onAdd: AddAnimation {
