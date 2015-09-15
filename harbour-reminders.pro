@@ -19,29 +19,37 @@ CONFIG += sailfishapp \
 QT += sql
 
 HEADERS += \
+    src/AnnotationsModel.h \
     src/FilterProperty.h \
     src/FoldersModel.h \
     src/ProjectsModel.h \
     src/SortFilterModel.h \
     src/SortProperty.h \
-    src/Storage.h
+    src/Storage.h \
+    src/TagsModel.h \
+    src/VirtualTagsModel.h
 
 SOURCES += src/Reminders.cpp \
+    src/AnnotationsModel.cpp \
     src/FilterProperty.cpp \
     src/FoldersModel.cpp \
     src/ProjectsModel.cpp \
     src/SortFilterModel.cpp \
     src/SortProperty.cpp \
-    src/Storage.cpp
+    src/Storage.cpp \
+    src/TagsModel.cpp \
+    src/VirtualTagsModel.cpp
 
 
 OTHER_FILES += \
     qml/Reminders.qml \
-    qml/cover/CoverPage.qml \
     qml/components/DateTimePicker.qml \
     qml/components/FolderDelegate.qml \
     qml/components/ReminderDelegate.qml \
     qml/components/Tag.qml \
+    qml/components/TagPicker.qml \
+    qml/components/TagPickerDialog.qml \
+    qml/cover/CoverPage.qml \
     qml/pages/Folders.qml \
     qml/pages/ProjectPickerDialog.qml \
     qml/pages/Reminder.qml \
@@ -52,7 +60,8 @@ OTHER_FILES += \
     rpm/$${TARGET}.spec \
     rpm/$${TARGET}.yaml \
     $${TARGET}.desktop \
-    qml/components/TagPicker.qml
+    qml/components/AnnotationsView.qml \
+    qml/components/VirtualTagsView.qml
 
 
 
