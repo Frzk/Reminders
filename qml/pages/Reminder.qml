@@ -41,9 +41,6 @@ import "../pragma/Helpers.js" as Helpers
 Page {
     id: page
 
-
-    //property var task: null
-    //property int taskId: -1
     property string reminder_uuid: "d1d43cae-60a2-454b-93c3-bab0e6233af9"
 
     // FIXME: dummy values, for testing purpose
@@ -127,9 +124,11 @@ Page {
         Column {
             id: column
 
-            //anchors.fill: parent
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
             spacing: Theme.paddingMedium
-            width: parent.width
 
             PageHeader {
                 title: qsTr("Task")
