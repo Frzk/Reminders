@@ -63,7 +63,7 @@ Dialog {
                             tag: searchField.text.trim(),
                             isSelected: true
                         })
-                        selected = false
+                        this.selected = false
                         searchField.text = ""
                     }
                 }
@@ -102,5 +102,10 @@ Dialog {
             property: "tag"
             order: Qt.AscendingOrder
         }
+    }
+
+
+    onRejected: {
+        availableTags.revertAll()
     }
 }
