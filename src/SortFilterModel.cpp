@@ -110,6 +110,11 @@ bool SortFilterModel::set(int row, const QString &roleName, const QVariant &valu
     return this->sourceModel()->setData(sourceIndex, value, role);
 }
 
+bool SortFilterModel::remove(int row)
+{
+    return this->removeRow(row);
+}
+
 int SortFilterModel::roleFromName(const QString &roleName) const
 {
     const QHash<int, QByteArray> roles = this->roleNames();
