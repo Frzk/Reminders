@@ -32,6 +32,8 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
+import org.kubler.Reminders 1.0
+
 import "../components"
 import "../pragma/Helpers.js" as Helpers
 
@@ -42,6 +44,7 @@ Page {
 
     //property var task: null
     //property int taskId: -1
+    property string reminder_uuid: "d1d43cae-60a2-454b-93c3-bab0e6233af9"
 
     // FIXME: dummy values, for testing purpose
     property var date_created: new Date(2015, 5, 12, 14, 38, 12, 234);
@@ -56,15 +59,27 @@ Page {
     SilicaFlickable
     {
         anchors.fill: parent
+        contentHeight: column.height
 
         RemorsePopup {
             id: remorse
         }
 
         PullDownMenu {
+            /*
+             * Actions:
+             *    - Move to Trash
+             *    - Edit
+             *    - Reopen
+             *    - Restore
+             *    - Mark as completed
+             *    - Start
+             */
+            /*
             MenuItem {
                 text: qsTr("Move to Trash")
             }
+            */
 
             MenuItem {
                 text: qsTr("Edit")
@@ -74,7 +89,7 @@ Page {
                     pageStack.push(Qt.resolvedUrl("ReminderEditor.qml"))
                 }
             }
-
+            /*
             MenuItem {
                 text: qsTr("Reopen")
                 //visible: task ? task.status === "completed" : false
@@ -106,13 +121,15 @@ Page {
                 text: qsTr("Start")
                 //visible: task ? (task.status === "pending" && !task.start) : false
             }
+            */
         }
 
         Column {
             id: column
 
-            anchors.fill: parent
+            //anchors.fill: parent
             spacing: Theme.paddingMedium
+            width: parent.width
 
             PageHeader {
                 title: qsTr("Task")
@@ -208,66 +225,53 @@ Page {
             TagPicker {
                 id: tagPicker
 
-                //enabled: false
-                model: ListModel {
-                    ListElement {
-                        tag: "Testing"
-                    }
-                    ListElement {
-                        tag: "WIP"
-                    }
-                    ListElement {
-                        tag: "UI"
-                    }
-                    ListElement {
-                        tag: "UX"
-                    }
-                }
+                enabled: true
+                model: tagsModel
             }
 
-            /*
-            Flow {
-                id: tagFlow
+            VirtualTagsView {
+                id: vTagsFlow
 
-                property alias tags: tags
-                property alias vtags: vtags
-
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    margins: Theme.paddingLarge
-                }
-                spacing: Theme.paddingMedium
-
-                Repeater {
-                    id: tags
-
-                    delegate: Tag {
-                        //FIXME: use some value from Theme
-                        color: Qt.rgba(255, 255, 255, 0.2)
-                        tag: "tag"
-                    }
-                }
-
-                Repeater {
-                    id: vtags
-
-                    delegate: Tag {
-                        tag: "vtag"
-                    }
-                }
+                model: virtualTagsModel
             }
-            */
 
             SectionHeader {
                 text: qsTr("Dependencies")
             }
+            /*
+            DependenciesView {
+                editable: false
+                model: dependenciesModel
+            }
+            */
 
             SectionHeader {
                 text: qsTr("Annotations")
             }
+            AnnotationsView {
+                editable: false
+                model: annotationsModel
+            }
         }
 
         VerticalScrollDecorator {}
+    }
+
+    TagsModel {
+        id: tagsModel
+
+        reminderUUID: reminder_uuid
+    }
+
+    AnnotationsModel {
+        id: annotationsModel
+
+        reminderUUID: reminder_uuid
+    }
+
+    VirtualTagsModel {
+        id: virtualTagsModel
+
+        reminderUUID: reminder_uuid
     }
 }
