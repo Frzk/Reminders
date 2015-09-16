@@ -9,10 +9,12 @@ import Sailfish.Silica 1.0
 
 import org.kubler.Reminders 1.0
 
+import "../components"
+
 BackgroundItem {
     id: root
 
-    property alias model: tags.model
+    property variant model
 
     height: tagFlow.height + 2 * Theme.paddingMedium
     width: parent.width
@@ -30,161 +32,27 @@ BackgroundItem {
         spacing: Theme.paddingMedium
 
         Repeater {
-            id: tags
+            id: tagsRepeater
 
             delegate: Tag {
                 enabled: false
                 selected: true
                 tag: model.tag
             }
+            model: root.model
         }
     }
 
     onClicked: {
-        var picker = pageStack.push(tagPickerDialog);
+        var picker = pageStack.push("TagPickerDialog.qml", { availableTags: availableTags, selectedTags: root.model });
+
+        picker.accepted.connect(function() {
+            //FIXME: TODO.
+            console.log(availableTags);
+        });
     }
 
-
-
-    Component {
-        id: tagPickerDialog
-
-        Dialog {
-            id: dialog
-
-            property string filter
-
-            SilicaFlickable {
-                anchors {
-                    fill: parent
-                }
-
-                Column {
-                    id: column
-
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                    }
-                    height: contentHeight
-
-                    DialogHeader {
-                        id: dialogHeader
-                    }
-
-                    SearchField {
-                        id: searchField
-
-                        anchors {
-                            left: parent.left
-                            right: parent.right
-                        }
-                    }
-
-                    Flow {
-                        id: selection
-
-                        anchors {
-                            left: parent.left
-                            margins: Theme.paddingLarge
-                            right: parent.right
-                        }
-                        height: parent.height - searchField.height - column.spacing
-                        spacing: Theme.paddingMedium
-
-                        Repeater {
-                            delegate: Tag {
-                                id: tag
-
-                                selected: model.selected
-                                tag: model.tag
-
-                                ListView.onAdd: AddAnimation {
-                                    target: tag
-                                }
-
-                                ListView.onRemove: RemoveAnimation {
-                                    target: tag
-                                }
-                            }
-                            model: tagsModel
-                        }
-                    }
-                }
-
-                VerticalScrollDecorator {}
-            }
-
-            ListModel {
-                id: tags
-
-                ListElement {
-                    tag: "quick"
-                    selected: false
-                }
-                ListElement {
-                    tag: "idea"
-                    selected: false
-                }
-                ListElement {
-                    tag: "health"
-                    selected: false
-                }
-                ListElement {
-                    tag: "work"
-                    selected: false
-                }
-                ListElement {
-                    tag: "SailfishOS"
-                    selected: true
-                }
-                ListElement {
-                    tag: "dev"
-                    selected: true
-                }
-                ListElement {
-                    tag: "sport"
-                    selected: false
-                }
-                ListElement {
-                    tag: "tagged"
-                    selected: false
-                }
-                ListElement {
-                    tag: "testing"
-                    selected: true
-                }
-                ListElement {
-                    tag: "Reminders app"
-                    selected: false
-                }
-                ListElement {
-                    tag: "UI"
-                    selected: false
-                }
-                ListElement {
-                    tag: "UX"
-                    selected: true
-                }
-                ListElement {
-                    tag: "WIP"
-                    selected: true
-                }
-            }
-
-            SortFilterModel {
-                id: tagsModel
-
-                filter {
-                    property: "tag"
-                    value: searchField.text
-                }
-                sort {
-                    property: "tag"
-                    order: Qt.AscendingOrder
-                }
-                model: tags
-            }
-        }
+    TagsSelectionModel {
+        id: availableTags
     }
 }
