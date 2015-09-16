@@ -33,6 +33,7 @@ class SortFilterModel : public QSortFilterProxyModel
         Q_INVOKABLE QVariantMap     get(int row) const;
         Q_INVOKABLE QVariant        data(int row, const QString &roleName) const;
         Q_INVOKABLE bool            set(int row, const QString &roleName, const QVariant &value);
+        Q_INVOKABLE bool            append(const QVariantMap &values);
         Q_INVOKABLE bool            remove(int row);
 
     private:

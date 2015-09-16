@@ -17,7 +17,6 @@ SortFilterModel::SortFilterModel(QObject *parent) : QSortFilterProxyModel(parent
 }
 
 
-
 SortProperty* SortFilterModel::sortProperty()
 {
     return &(this->m_sort);
@@ -27,7 +26,6 @@ FilterProperty* SortFilterModel::filterProperty()
 {
     return &(this->m_filter);
 }
-
 
 void SortFilterModel::setModel(QAbstractItemModel *model)
 {
@@ -65,22 +63,6 @@ bool SortFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source
     return r;
 }
 
-QVariant SortFilterModel::data(int row, int role) const
-{
-    QVariant r;
-
-    if(this->sourceModel() != NULL)
-        r = this->index(row, 0).data(role);
-
-    return r;
-}
-
-QVariant SortFilterModel::data(int row, const QString &roleName) const
-{
-    int role = this->roleFromName(roleName);
-
-    return this->data(row, role);
-}
 
 QVariantMap SortFilterModel::get(int row) const
 {
@@ -98,27 +80,50 @@ QVariantMap SortFilterModel::get(int row) const
     return r;
 }
 
+QVariant SortFilterModel::data(int row, const QString &roleName) const
+{
+    int role = this->roleFromName(roleName);
+
+    return this->data(row, role);
+}
+
 bool SortFilterModel::set(int row, const QString &roleName, const QVariant &value)
 {
     int role = this->roleFromName(roleName);
 
-    // Since we only get a row from QML, we hard-code the column to zero.
-    // It's then up to the sourceModel to redefine its setData() method to map the given role with the corresponding column.
+    // Since QML only gives us a row, we set column to zero.
+    // It's then up to the sourceModel to fix this column value in its `setData()` implementation.
+    // This may be done depending on the given role.
     QModelIndex proxyIndex = this->index(row, 0);
     QModelIndex sourceIndex = this->mapToSource(proxyIndex);
 
     return this->sourceModel()->setData(sourceIndex, value, role);
 }
 
+bool SortFilterModel::append(const QVariantMap &values)
+{
+    int newRow = this->sourceModel()->rowCount();
+    bool r = this->sourceModel()->insertRow(newRow);
+
+    if(r)
+    {
+        QModelIndex sourceIndex = this->sourceModel()->index(newRow, 0);
+
+        QMap<QString, QVariant>::const_iterator i = values.constBegin();
+        while(i != values.constEnd())
+        {
+            int role = this->roleFromName(i.key());
+            r = r && this->sourceModel()->setData(sourceIndex, i.value(), role);
+            i++;
+        }
+    }
+
+    return r;
+}
+
 bool SortFilterModel::remove(int row)
 {
     return this->removeRow(row);
-}
-
-int SortFilterModel::roleFromName(const QString &roleName) const
-{
-    const QHash<int, QByteArray> roles = this->roleNames();
-    return roles.key(roleName.toLatin1(), 0);
 }
 
 
@@ -132,4 +137,21 @@ void SortFilterModel::sortChanged()
 {
     this->setSortRole(this->roleFromName(this->m_sort.property()));
     this->sort(this->sortColumn() != -1 ? this->sortColumn() : 0, this->m_sort.order());
+}
+
+
+QVariant SortFilterModel::data(int row, int role) const
+{
+    QVariant r;
+
+    if(this->sourceModel() != NULL)
+        r = this->index(row, 0).data(role);
+
+    return r;
+}
+
+int SortFilterModel::roleFromName(const QString &roleName) const
+{
+    const QHash<int, QByteArray> roles = this->roleNames();
+    return roles.key(roleName.toLatin1(), 0);
 }
