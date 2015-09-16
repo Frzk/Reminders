@@ -4,8 +4,6 @@
 TagsSelectionModel::TagsSelectionModel(QObject *parent) : QSqlTableModel(parent)
 {
     this->setEditStrategy(EditStrategy::OnManualSubmit);
-    //this->setTable("tags");
-    //this->setSort(1, Qt::AscendingOrder);
     this->setQuery(QSqlQuery("SELECT id, tag, 0 AS isSelected FROM tags ORDER BY tag ASC;"));
     this->select();
 }
@@ -62,17 +60,4 @@ QHash<int, QByteArray> TagsSelectionModel::roleNames() const
     roles[IsSelected] = "isSelected";
 
     return roles;
-}
-
-
-bool TagsSelectionModel::append(const QVariantMap &values)
-{
-    qDebug() << "Adding" << values << "to the model.";
-
-    QSqlRecord record = this->record();
-    record.setValue(0, -1);
-    record.setValue(1, values.value("tag").toString());
-    record.setValue(2, values.value("isSelected").toBool());
-
-    return this->insertRecord(-1, record);
 }
