@@ -27,6 +27,7 @@ HEADERS += \
     src/SortProperty.h \
     src/Storage.h \
     src/TagsModel.h \
+    src/TagsSelectionModel.h \
     src/VirtualTagsModel.h
 
 SOURCES += src/Reminders.cpp \
@@ -38,6 +39,7 @@ SOURCES += src/Reminders.cpp \
     src/SortProperty.cpp \
     src/Storage.cpp \
     src/TagsModel.cpp \
+    src/TagsSelectionModel.cpp \
     src/VirtualTagsModel.cpp
 
 

@@ -39,6 +39,7 @@
 #include "FoldersModel.h"
 #include "ProjectsModel.h"
 #include "TagsModel.h"
+#include "TagsSelectionModel.h"
 #include "AnnotationsModel.h"
 #include "VirtualTagsModel.h"
 
@@ -60,6 +61,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<FoldersModel>("org.kubler.Reminders", 1, 0, "FoldersModel");
     qmlRegisterType<ProjectsModel>("org.kubler.Reminders", 1, 0, "ProjectsModel");
     qmlRegisterType<TagsModel>("org.kubler.Reminders", 1, 0, "TagsModel");
+    qmlRegisterType<TagsSelectionModel>("org.kubler.Reminders", 1, 0, "TagsSelectionModel");
     qmlRegisterType<AnnotationsModel>("org.kubler.Reminders", 1, 0, "AnnotationsModel");
     qmlRegisterType<VirtualTagsModel>("org.kubler.Reminders", 1, 0, "VirtualTagsModel");
 
