@@ -1,10 +1,13 @@
 #include "TagsSelectionModel.h"
 
 
+const QString TagsSelectionModel::QUERY = "SELECT id, tag, 0 AS isSelected FROM tags ORDER BY tag ASC;";
+
+
 TagsSelectionModel::TagsSelectionModel(QObject *parent) : QSqlTableModel(parent)
 {
     this->setEditStrategy(EditStrategy::OnManualSubmit);
-    this->setQuery(QSqlQuery("SELECT id, tag, 0 AS isSelected FROM tags ORDER BY tag ASC;"));
+    this->setQuery(QSqlQuery(TagsSelectionModel::QUERY));
     this->select();
 }
 
