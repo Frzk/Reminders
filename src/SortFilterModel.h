@@ -7,6 +7,7 @@
 
 #include "FilterProperty.h"
 #include "SortProperty.h"
+#include "TagsSelectionModel.h"
 
 class SortFilterModel : public QSortFilterProxyModel
 {
@@ -14,20 +15,24 @@ class SortFilterModel : public QSortFilterProxyModel
 
     Q_PROPERTY(FilterProperty* filter READ filterProperty)
     Q_PROPERTY(SortProperty* sort READ sortProperty)
-    Q_PROPERTY(QAbstractItemModel* model READ sourceModel WRITE setModel NOTIFY modelChanged)
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
+    Q_PROPERTY(QAbstractItemModel* sourceModel READ sourceModel WRITE setModel NOTIFY modelChanged)
+    Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 
     public:
         explicit SortFilterModel(QObject *parent = 0);
 
-        Q_INVOKABLE QVariantMap get(int row) const;
-        Q_INVOKABLE QVariant    data(int row, int role) const;
-        Q_INVOKABLE int         count() const;
+        // Q_PROPERTIES :
+        void                        setModel(QAbstractItemModel* model);
 
-        QHash<int, QByteArray>  roleNames() const;
-        bool                    filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+        // QSortFilterProxyModel :
+        QHash<int, QByteArray>      roleNames() const;
+        bool                        filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+        QVariant                    data(int row, int role) const;
 
-        void                    setModel(QAbstractItemModel* model);
+        // QML API :
+        Q_INVOKABLE QVariantMap     get(int row) const;
+        Q_INVOKABLE QVariant        data(int row, const QString &roleName) const;
+        Q_INVOKABLE bool            set(int row, const QString &roleName, const QVariant &value);
 
     private:
         FilterProperty  m_filter;
@@ -39,7 +44,7 @@ class SortFilterModel : public QSortFilterProxyModel
         void            filterChanged();
         void            sortChanged();
 
-        int roleFromName(const QString &roleName) const;
+        int             roleFromName(const QString &roleName) const;
 
     signals:
         void countChanged();

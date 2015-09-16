@@ -48,7 +48,6 @@ void SortFilterModel::setModel(QAbstractItemModel *model)
 }
 
 
-
 QHash<int, QByteArray> SortFilterModel::roleNames() const
 {
     return this->sourceModel() ? this->sourceModel()->roleNames() : QHash<int, QByteArray>();
@@ -66,27 +65,6 @@ bool SortFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source
     return r;
 }
 
-
-
-QVariantMap SortFilterModel::get(int row) const
-{
-    QVariantMap r;
-
-    const QHash<int, QByteArray> roles = this->roleNames();
-    QHash<int, QByteArray>::const_iterator i = roles.constBegin();
-
-    qDebug() << QString("Calling get.");
-
-    while(i != roles.constEnd())
-    {
-        qDebug() << this->data(row, i.key());
-        r.insert(i.value(), this->data(row, i.key()));
-        ++i;
-    }
-
-    return r;
-}
-
 QVariant SortFilterModel::data(int row, int role) const
 {
     QVariant r;
@@ -97,19 +75,46 @@ QVariant SortFilterModel::data(int row, int role) const
     return r;
 }
 
-int SortFilterModel::count() const
+QVariant SortFilterModel::data(int row, const QString &roleName) const
 {
-    return this->rowCount();
+    int role = this->roleFromName(roleName);
+
+    return this->data(row, role);
 }
 
+QVariantMap SortFilterModel::get(int row) const
+{
+    QVariantMap r;
 
+    const QHash<int, QByteArray> roles = this->roleNames();
+    QHash<int, QByteArray>::const_iterator i = roles.constBegin();
+
+    while(i != roles.constEnd())
+    {
+        r.insert(i.value(), this->data(row, i.key()));
+        ++i;
+    }
+
+    return r;
+}
+
+bool SortFilterModel::set(int row, const QString &roleName, const QVariant &value)
+{
+    int role = this->roleFromName(roleName);
+
+    // Since we only get a row from QML, we hard-code the column to zero.
+    // It's then up to the sourceModel to redefine its setData() method to map the given role with the corresponding column.
+    QModelIndex proxyIndex = this->index(row, 0);
+    QModelIndex sourceIndex = this->mapToSource(proxyIndex);
+
+    return this->sourceModel()->setData(sourceIndex, value, role);
+}
 
 int SortFilterModel::roleFromName(const QString &roleName) const
 {
     const QHash<int, QByteArray> roles = this->roleNames();
     return roles.key(roleName.toLatin1(), 0);
 }
-
 
 
 void SortFilterModel::filterChanged()
