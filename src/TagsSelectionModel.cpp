@@ -70,7 +70,7 @@ bool TagsSelectionModel::append(const QVariantMap &values)
     qDebug() << "Adding" << values << "to the model.";
 
     QSqlRecord record = this->record();
-    //record.setValue(0, -1);
+    record.setValue(0, -1);
     record.setValue(1, values.value("tag").toString());
     record.setValue(2, values.value("isSelected").toBool());
 
