@@ -20,6 +20,7 @@ class SortFilterModel : public QSortFilterProxyModel
 
     public:
         explicit SortFilterModel(QObject *parent = 0);
+        ~SortFilterModel();
 
         // Q_PROPERTIES :
         void                        setModel(QAbstractItemModel* model);
@@ -35,6 +36,8 @@ class SortFilterModel : public QSortFilterProxyModel
         Q_INVOKABLE bool            set(int row, const QString &roleName, const QVariant &value);
         Q_INVOKABLE bool            append(const QVariantMap &values);
         Q_INVOKABLE bool            remove(int row);
+        //Q_INVOKABLE int             sourceRow(int row) const;
+        Q_INVOKABLE bool            contains(const QString &roleName, const QVariant &value) const;
 
     private:
         FilterProperty  m_filter;
@@ -49,8 +52,8 @@ class SortFilterModel : public QSortFilterProxyModel
         int             roleFromName(const QString &roleName) const;
 
     signals:
-        void countChanged();
-        void modelChanged();
+        void            countChanged();
+        void            modelChanged();
 };
 
 #endif // SORTFILTERMODEL_H

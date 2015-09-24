@@ -1,5 +1,6 @@
 #include "SortFilterModel.h"
 
+
 SortFilterModel::SortFilterModel(QObject *parent) : QSortFilterProxyModel(parent)
 {
     this->setDynamicSortFilter(true);
@@ -14,6 +15,12 @@ SortFilterModel::SortFilterModel(QObject *parent) : QSortFilterProxyModel(parent
     QObject::connect(&(this->m_filter), &FilterProperty::valueChanged, this, &SortFilterModel::filterChanged);
     QObject::connect(&(this->m_sort), &SortProperty::propertyChanged, this, &SortFilterModel::sortChanged);
     QObject::connect(&(this->m_sort), &SortProperty::orderChanged, this, &SortFilterModel::sortChanged);
+}
+
+SortFilterModel::~SortFilterModel()
+{
+    if(this->sourceModel() != NULL)
+        this->sourceModel()->disconnect(this);
 }
 
 
@@ -125,6 +132,28 @@ bool SortFilterModel::remove(int row)
 {
     return this->removeRow(row);
 }
+
+bool SortFilterModel::contains(const QString &roleName, const QVariant &value) const
+{
+    int role = this->roleFromName(roleName);
+
+    QModelIndex start = this->index(0, 0);
+
+    QModelIndexList searchResults = this->match(start, role, value, 1, Qt::MatchExactly);
+    bool r = !searchResults.isEmpty();
+
+    return r;
+}
+
+/*
+int SortFilterModel::sourceRow(int row) const
+{
+    QModelIndex proxyIndex = this->index(row, 0);
+    QModelIndex sourceIndex = this->mapToSource(proxyIndex);
+
+    return sourceIndex.row();
+}
+*/
 
 
 void SortFilterModel::filterChanged()
