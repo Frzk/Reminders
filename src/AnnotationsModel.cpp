@@ -1,18 +1,17 @@
 #include "AnnotationsModel.h"
 
+
 const QString AnnotationsModel::FILTER = QString("reminder_uuid='%1'");
 
-enum Roles {
-    AnnotationIdRole = Qt::UserRole + 1,
-    AnnotationRole,
-};
 
 AnnotationsModel::AnnotationsModel(QObject * parent) : QSqlTableModel(parent)
 {
+    QObject::connect(this, &AnnotationsModel::rowsInserted, this, &AnnotationsModel::emitCountChanged);
+    QObject::connect(this, &AnnotationsModel::rowsRemoved, this, &AnnotationsModel::emitCountChanged);
+
     this->setTable("annotations");
     this->setSort(1, Qt::AscendingOrder);
     this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    this->select();
 
     QObject::connect(this, &AnnotationsModel::reminderUUIDChanged, this, &AnnotationsModel::refresh);
 }
@@ -79,7 +78,7 @@ bool AnnotationsModel::update(int row, const QString & annotation)
 {
     QModelIndex index = this->index(row, 0);
 
-    return this->setData(index, annotation, Qt::UserRole + 2);  //FIXME: AnnotationsModel::AnnotationRole
+    return this->setData(index, annotation, AnnotationsModel::AnnotationRole);
 }
 
 
@@ -87,7 +86,6 @@ void AnnotationsModel::refresh()
 {
     this->setFilter(AnnotationsModel::FILTER.arg(this->m_reminderUUID));
 
-    //FIXME: see if this is needed when inheriting from QSqlTableModel.
     /*
      * We have to test if the query is active or not to avoid populating the model twice.
      * (it may have already been populated by setFilter().)
@@ -95,8 +93,11 @@ void AnnotationsModel::refresh()
      * See http://doc.qt.io/qt-5/qsqltablemodel.html#setFilter for further details.
      */
     if(!this->query().isActive())
-    {
-        qDebug() << "I need to select !";
         this->select();
-    }
+}
+
+
+void AnnotationsModel::emitCountChanged() const
+{
+    Q_EMIT this->countChanged(this->rowCount());
 }

@@ -10,7 +10,7 @@
 class AnnotationsModel : public QSqlTableModel
 {
     Q_OBJECT
-    Q_PROPERTY(int count READ rowCount)
+    Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
     Q_PROPERTY(QString reminderUUID READ reminderUUID WRITE setReminderUUID NOTIFY reminderUUIDChanged)
 
     // insertRecord(int row, const QSqlRecord & record)
@@ -20,6 +20,12 @@ class AnnotationsModel : public QSqlTableModel
     public:
         explicit AnnotationsModel(QObject *parent = 0);
         ~AnnotationsModel();
+
+        // Roles:
+        enum Roles {
+            AnnotationIdRole = Qt::UserRole + 1,
+            AnnotationRole,
+        };
 
         // QSqlTableModel :
         QVariant                data(const QModelIndex &index, int role = Qt::DisplayRole) const;
@@ -37,12 +43,16 @@ class AnnotationsModel : public QSqlTableModel
         //
         void                    refresh();
 
+    signals:
+        void                    reminderUUIDChanged() const;
+        void                    countChanged(int) const;
+
     private:
         static const QString    FILTER;
         QString                 m_reminderUUID;
 
-    signals:
-        void                    reminderUUIDChanged();
+    private slots:
+        void                    emitCountChanged() const;
 };
 
 #endif // ANNOTATIONSMODEL_H
