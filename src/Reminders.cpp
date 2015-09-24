@@ -35,11 +35,12 @@
 #include <sailfishapp.h>
 #include "Storage.h"
 
+#include "AvailableTagsModel.h"
 #include "SortFilterModel.h"
+#include "SortFilterSelectionModel.h"
 #include "FoldersModel.h"
 #include "ProjectsModel.h"
 #include "TagsModel.h"
-#include "TagsSelectionModel.h"
 #include "AnnotationsModel.h"
 #include "VirtualTagsModel.h"
 
@@ -58,10 +59,11 @@ int main(int argc, char *argv[])
     qmlRegisterType<FilterProperty>("org.kubler.Reminders", 1, 0, "FilterProperty");
     qmlRegisterType<SortProperty>("org.kubler.Reminders", 1, 0, "SortProperty");
     qmlRegisterType<SortFilterModel>("org.kubler.Reminders", 1, 0, "SortFilterModel");
+    qmlRegisterType<SortFilterSelectionModel>("org.kubler.Reminders", 1, 0, "SortFilterSelectionModel");
     qmlRegisterType<FoldersModel>("org.kubler.Reminders", 1, 0, "FoldersModel");
     qmlRegisterType<ProjectsModel>("org.kubler.Reminders", 1, 0, "ProjectsModel");
     qmlRegisterType<TagsModel>("org.kubler.Reminders", 1, 0, "TagsModel");
-    qmlRegisterType<TagsSelectionModel>("org.kubler.Reminders", 1, 0, "TagsSelectionModel");
+    qmlRegisterType<AvailableTagsModel>("org.kubler.Reminders", 1, 0, "AvailableTagsModel");
     qmlRegisterType<AnnotationsModel>("org.kubler.Reminders", 1, 0, "AnnotationsModel");
     qmlRegisterType<VirtualTagsModel>("org.kubler.Reminders", 1, 0, "VirtualTagsModel");
 
