@@ -1,12 +1,7 @@
 #include "TagsModel.h"
 
+
 const QString TagsModel::FILTER = QString("reminder_uuid='%1'");
-
-
-enum Roles {
-    TagIdRole = Qt::UserRole + 1,
-    TagNameRole
-};
 
 
 TagsModel::TagsModel(QObject *parent) : QSqlRelationalTableModel(parent)
@@ -15,7 +10,6 @@ TagsModel::TagsModel(QObject *parent) : QSqlRelationalTableModel(parent)
     this->setRelation(1, QSqlRelation("tags", "id", "tag"));
     this->setSort(1, Qt::AscendingOrder);
     this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    this->select();
 
     QObject::connect(this, &TagsModel::reminderUUIDChanged, this, &TagsModel::refresh);
 }
@@ -67,7 +61,7 @@ void TagsModel::setReminderUUID(const QString &uuid)
 
 void TagsModel::refresh()
 {
-    if(this->m_reminderUUID != "")
+    if(!this->m_reminderUUID.isEmpty())
         this->setFilter(TagsModel::FILTER.arg(this->m_reminderUUID));
     else
         this->setFilter("");    // Remove filter.
@@ -79,8 +73,5 @@ void TagsModel::refresh()
      * See http://doc.qt.io/qt-5/qsqltablemodel.html#setFilter for further details.
      */
     if(!this->query().isActive())
-    {
-        qDebug() << "I need to select !";
         this->select();
-    }
 }

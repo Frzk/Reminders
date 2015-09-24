@@ -17,11 +17,17 @@ class TagsModel : public QSqlRelationalTableModel
         explicit    TagsModel(QObject *parent = 0);
         ~TagsModel();
 
-        // QSqlRelationalTableModel :
+        // Roles:
+        enum Roles {
+            TagIdRole = Qt::UserRole + 1,   // id of the tag, as set by the database
+            TagNameRole                     // Name of the tag
+        };
+
+        // QSqlRelationalTableModel:
         QHash<int, QByteArray>  roleNames() const;
         QVariant                data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-        // Q_PROPORTIES :
+        // Q_PROPERTIES:
         QString                 reminderUUID() const;
         void                    setReminderUUID(const QString &uuid);
 
