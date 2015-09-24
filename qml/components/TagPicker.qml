@@ -14,7 +14,7 @@ import "../components"
 BackgroundItem {
     id: root
 
-    property variant model
+    property TagsModel model
 
     height: tagFlow.height + 2 * Theme.paddingMedium
     width: parent.width
@@ -47,12 +47,19 @@ BackgroundItem {
         var picker = pageStack.push("TagPickerDialog.qml", { availableTags: availableTags, selectedTags: root.model });
 
         picker.accepted.connect(function() {
-            //FIXME: TODO.
-            console.log(availableTags);
+            console.log("Selection :")
+            var newTags = picker.selection.selection();
+
+            for(var i=0 ; i<newTags.length ; i++)
+            {
+                console.log("  ", newTags[i].tag_id, ":", newTags[i].tag);
+            }
+
+            //root.model = newTags;
         });
     }
 
-    TagsSelectionModel {
+    AvailableTagsModel {
         id: availableTags
     }
 }

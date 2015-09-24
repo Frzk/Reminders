@@ -7,8 +7,24 @@ Dialog {
     id: dialog
 
 
-    property TagsSelectionModel availableTags
+    property AvailableTagsModel availableTags
     property TagsModel selectedTags
+
+    property alias selection: selectionModel
+    property alias model: selectionModel.sourceModel
+
+
+    function appendTag()
+    {
+        if(newItem.visible)
+            selectionModel.append({
+                tag_id: -1,
+                tag: searchField.text.trim(),
+                isSelected: true
+            })
+        else
+            selectionModel.select(0)
+    }
 
 
     SilicaFlickable {
@@ -35,6 +51,12 @@ Dialog {
                     left: parent.left
                     right: parent.right
                 }
+
+                EnterKey.enabled: text.length > 0
+                EnterKey.onClicked: {
+                    appendTag()
+                    this.text = ""
+                }
             }
 
             Flow {
@@ -45,7 +67,7 @@ Dialog {
                     margins: Theme.paddingLarge
                     right: parent.right
                 }
-                height: parent.height - searchField.height - column.spacing
+                //height: parent.height - searchField.height - column.spacing
                 spacing: Theme.paddingMedium
 
                 Tag {
@@ -53,16 +75,13 @@ Dialog {
 
                     tag: searchField.text.trim()
                     selected: false
-                    visible: ! (searchField.text === ""
-                                         || (filterableModel.count === 1
-                                             && searchField.text.toLocaleLowerCase() === filterableModel.data(0, "tag").toLocaleLowerCase()))
+                    // This item always visible unless :
+                    //     - searchField is empty ;
+                    //     - OR there is already a tag by that exact name.
+                    visible: ! (searchField.text === "" || selectionModel.contains("tag", searchField.text.toLocaleLowerCase()))
 
                     onClicked: {
-                        filterableModel.append({
-                            tag_id: -1,
-                            tag: searchField.text.trim(),
-                            isSelected: true
-                        })
+                        appendTag()
                         this.selected = false
                         searchField.text = ""
                     }
@@ -77,12 +96,17 @@ Dialog {
 
                         onClicked: {
                             if(tag_id === -1)
-                                filterableModel.remove(index)
+                                selectionModel.remove(index)
                             else
-                                filterableModel.set(index, "isSelected", !isSelected)
+                            {
+                                if(!selected)
+                                    selectionModel.select(index)
+                                else
+                                    selectionModel.deselect(index)
+                            }
                         }
                     }
-                    model: filterableModel
+                    model: selectionModel
                 }
             }
         }
@@ -90,8 +114,8 @@ Dialog {
         VerticalScrollDecorator {}
     }
 
-    SortFilterModel {
-        id: filterableModel
+    SortFilterSelectionModel {
+        id: selectionModel
 
         sourceModel: availableTags
         filter {
@@ -106,6 +130,7 @@ Dialog {
 
 
     onRejected: {
+        selectionModel.clearSelection()
         availableTags.revertAll()
     }
 }
