@@ -20,26 +20,28 @@ QT += sql
 
 HEADERS += \
     src/AnnotationsModel.h \
+    src/AvailableTagsModel.h \
     src/FilterProperty.h \
     src/FoldersModel.h \
     src/ProjectsModel.h \
     src/SortFilterModel.h \
+    src/SortFilterSelectionModel.h \
     src/SortProperty.h \
     src/Storage.h \
     src/TagsModel.h \
-    src/TagsSelectionModel.h \
     src/VirtualTagsModel.h
 
 SOURCES += src/Reminders.cpp \
     src/AnnotationsModel.cpp \
+    src/AvailableTagsModel.cpp \
     src/FilterProperty.cpp \
     src/FoldersModel.cpp \
     src/ProjectsModel.cpp \
     src/SortFilterModel.cpp \
+    src/SortFilterSelection.cpp \
     src/SortProperty.cpp \
     src/Storage.cpp \
     src/TagsModel.cpp \
-    src/TagsSelectionModel.cpp \
     src/VirtualTagsModel.cpp
 
 
