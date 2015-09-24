@@ -38,7 +38,7 @@ SOURCES += src/Reminders.cpp \
     src/FoldersModel.cpp \
     src/ProjectsModel.cpp \
     src/SortFilterModel.cpp \
-    src/SortFilterSelection.cpp \
+    src/SortFilterSelectionModel.cpp \
     src/SortProperty.cpp \
     src/Storage.cpp \
     src/TagsModel.cpp \
