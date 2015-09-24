@@ -7,9 +7,7 @@ Dialog {
     id: dialog
 
 
-    property AvailableTagsModel availableTags
     property TagsModel selectedTags
-
     property alias selection: selectionModel
     property alias model: selectionModel.sourceModel
 
@@ -26,6 +24,24 @@ Dialog {
             selectionModel.select(0)
     }
 
+
+    AvailableTagsModel {
+        id: availableTags
+    }
+
+    SortFilterSelectionModel {
+        id: selectionModel
+
+        sourceModel: availableTags
+        filter {
+            property: "tag"
+            value: searchField.text
+        }
+        sort {
+            property: "tag"
+            order: Qt.AscendingOrder
+        }
+    }
 
     SilicaFlickable {
 
@@ -114,23 +130,9 @@ Dialog {
         VerticalScrollDecorator {}
     }
 
-    SortFilterSelectionModel {
-        id: selectionModel
-
-        sourceModel: availableTags
-        filter {
-            property: "tag"
-            value: searchField.text
-        }
-        sort {
-            property: "tag"
-            order: Qt.AscendingOrder
-        }
-    }
-
 
     onRejected: {
         selectionModel.clearSelection()
-        availableTags.revertAll()
+        selectionModel.sourceModel.revertAll()
     }
 }

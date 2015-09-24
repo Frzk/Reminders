@@ -44,7 +44,7 @@ BackgroundItem {
     }
 
     onClicked: {
-        var picker = pageStack.push("TagPickerDialog.qml", { availableTags: availableTags, selectedTags: root.model });
+        var picker = pageStack.push("TagPickerDialog.qml", { selectedTags: root.model });
 
         picker.accepted.connect(function() {
             console.log("Selection :")
@@ -55,11 +55,8 @@ BackgroundItem {
                 console.log("  ", newTags[i].tag_id, ":", newTags[i].tag);
             }
 
+            root.model.clear();
             //root.model = newTags;
         });
-    }
-
-    AvailableTagsModel {
-        id: availableTags
     }
 }
