@@ -79,15 +79,16 @@ BackgroundItem {
 
 
     onClicked: {
-        var picker = pageStack.push("TagPickerDialog.qml", { selectedTags: root.model });
+        var picker = pageStack.push("TagPickerDialog.qml", { selectedTags: root.model })
 
         picker.accepted.connect(function() {
-            var newTags = picker.selection.selection();
+            var newTags = picker.selection.selection()
             root.model.update(newTags)
+            root.vmodel.refresh()
         });
 
         picker.rejected.connect(function() {
-            picker.model.revertAll();
+            picker.model.revertAll()
         });
     }
 }

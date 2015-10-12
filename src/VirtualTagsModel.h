@@ -29,7 +29,7 @@ class VirtualTagsModel : public QStringListModel
     signals:
         void                    reminderUUIDChanged();
 
-    private slots:
+    public slots:
         void                    refresh();
 };
 
