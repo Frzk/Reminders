@@ -25,14 +25,10 @@ Dialog {
     }
 
 
-    AvailableTagsModel {
-        id: availableTags
-    }
-
     SortFilterSelectionModel {
         id: selectionModel
 
-        sourceModel: availableTags
+        sourceModel: AvailableTagsModel {}
         filter {
             property: "tag"
             value: searchField.text
@@ -131,8 +127,10 @@ Dialog {
     }
 
 
-    onRejected: {
-        selectionModel.clearSelection()
-        selectionModel.sourceModel.revertAll()
+    Component.onCompleted: {
+        for(var i=0 ; i<selectionModel.count ; i++)
+        {
+            selectionModel.select(i);
+        }
     }
 }

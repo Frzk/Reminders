@@ -77,25 +77,12 @@ BackgroundItem {
         }
     }
 
-    /*
-    AvailableTagsModel {
-        id: availableTags
-    }
-    */
 
     onClicked: {
         var picker = pageStack.push("TagPickerDialog.qml", { selectedTags: root.model });
 
         picker.accepted.connect(function() {
-            //picker.model.submitAll()  // Invalidates indexes and so clears the selection.
             var newTags = picker.selection.selection();
-
-            console.log("Selection :")
-            for(var i=0 ; i<newTags.length ; i++)
-            {
-                console.log("  ", newTags[i].tag_id, ":", newTags[i].tag);
-            }
-
             root.model.update(newTags)
         });
 
