@@ -54,6 +54,7 @@ MouseArea {
     id: root
 
     property alias color: rect.color
+    property alias fontColor: label.color
     property alias fontSize: label.font.pixelSize
     property alias highlighted: root.pressed
     property alias tag: label.text
