@@ -226,12 +226,7 @@ Page {
 
                 enabled: true
                 model: tagsModel
-            }
-
-            VirtualTagsView {
-                id: vTagsFlow
-
-                model: virtualTagsModel
+                vmodel: virtualTagsModel
             }
 
             SectionHeader {
