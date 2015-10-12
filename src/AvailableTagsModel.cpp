@@ -9,6 +9,7 @@ AvailableTagsModel::AvailableTagsModel(QObject *parent) : QSqlTableModel(parent)
     this->setTable("tags");
     this->setSort(1, Qt::AscendingOrder);
     this->setEditStrategy(EditStrategy::OnManualSubmit);
+    //this->setEditStrategy(EditStrategy::OnRowChange);
     this->select();
 }
 

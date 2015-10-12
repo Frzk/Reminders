@@ -3,6 +3,7 @@
 
 #include <QDebug>
 
+#include <QSqlError>
 #include <QSqlTableModel>
 
 class AvailableTagsModel : public QSqlTableModel

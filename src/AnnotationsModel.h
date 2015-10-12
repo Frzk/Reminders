@@ -10,6 +10,7 @@
 class AnnotationsModel : public QSqlTableModel
 {
     Q_OBJECT
+
     Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
     Q_PROPERTY(QString reminderUUID READ reminderUUID WRITE setReminderUUID NOTIFY reminderUUIDChanged)
 

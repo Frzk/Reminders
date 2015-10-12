@@ -7,7 +7,6 @@
 
 #include "FilterProperty.h"
 #include "SortProperty.h"
-#include "TagsSelectionModel.h"
 
 class SortFilterModel : public QSortFilterProxyModel
 {

@@ -433,10 +433,10 @@ Storage::operator QSqlDatabase const &() const
     return this->m_db;
 }
 
-/**
- * @brief Opens the database.
- *
- * @return bool
+/*!
+    Opens the database.
+
+    Returns true if the database could be successfully opened or false on error.
  */
 bool Storage::openDB()
 {
@@ -511,12 +511,66 @@ bool Storage::openDB()
     return r;
 }
 
-/**
- * @brief Checks if the database is opened.
- *
- * @return bool
+/*!
+    Checks if the database is opened.
+
+    Returns true if the database is open, false otherwise.
  */
 bool Storage::isOpen()
 {
     return this->m_db.isOpen();
+}
+
+/*!
+    Executes the given query.
+ */
+QSqlQuery Storage::exec(const QString &stmt, \
+                          const bool preparedStatement, \
+                          const QSqlRecord &record, \
+                          const QSqlRecord &whereValues)
+{
+    QSqlQuery q;
+    bool r = false;
+
+    if(preparedStatement)
+    {
+        if(q.lastQuery() != stmt)
+            r = q.prepare(stmt);
+        else    // Already prepared.
+            r = true;
+
+        if(r)
+        {
+            int i;
+
+            for(i=0 ; i<record.count() ; i++)
+            {
+                if(record.isGenerated(i))
+                    q.addBindValue(record.value(i));
+            }
+
+            for(i=0 ; i<whereValues.count() ; i++)
+            {
+                if(whereValues.isGenerated(i) && !whereValues.isNull(i))
+                    q.addBindValue(whereValues.value(i));
+            }
+
+            qDebug() << "Storage:" << q.executedQuery();
+
+            r = q.exec();
+            qDebug() << r;
+        }
+    }
+    else
+    {
+        r = q.exec(stmt);
+    }
+
+    if(!r)
+    {
+        qDebug() << q.lastError();
+        //FIXME: logfile.
+    }
+
+    return q;
 }

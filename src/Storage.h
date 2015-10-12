@@ -8,6 +8,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlQueryModel>
+#include <QSqlRecord>
 #include <QSqlTableModel>
 
 #include <QDir>
@@ -23,11 +24,16 @@ class Storage
         explicit Storage();
         ~Storage();
 
-        bool openDB();
-        bool isOpen();
+        bool                    openDB();
+        bool                    isOpen();
 
-        operator QSqlDatabase &();
-        operator QSqlDatabase const &() const;
+        static QSqlQuery        exec(const QString &stmt, \
+                                     const bool preparedStatement, \
+                                     const QSqlRecord &record, \
+                                     const QSqlRecord &whereValues);
+
+        operator                QSqlDatabase &();
+        operator                QSqlDatabase const &() const;
 
     private:
         QSqlDatabase    m_db;
