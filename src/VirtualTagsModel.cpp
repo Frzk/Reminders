@@ -1,29 +1,29 @@
 #include "VirtualTagsModel.h"
 
 const QString VirtualTagsModel::QUERY =
-        QString("SELECT \
-            vt_pending, \
-            vt_completed, \
-            vt_overdue, \
-            vt_due, \
-            vt_today, \
-            vt_yesterday, \
-            vt_tomorrow, \
-            vt_week, \
-            vt_month, \
-            vt_year, \
-            vt_until, \
-            vt_active, \
-            vt_scheduled, \
-            vt_tagged, \
-            vt_annotated, \
-            vt_waiting, \
-            vt_parent, \
-            vt_child, \
-            vt_blocked, \
-            vt_blocking, \
-            vt_ready \
-            FROM virtualtags WHERE uuid='%1'");
+        QString("SELECT "
+            "vt_pending, "
+            "vt_completed, "
+            "vt_overdue, "
+            "vt_due, "
+            "vt_today, "
+            "vt_yesterday, "
+            "vt_tomorrow, "
+            "vt_week, "
+            "vt_month, "
+            "vt_year, "
+            "vt_until, "
+            "vt_active, "
+            "vt_scheduled, "
+            "vt_tagged, "
+            "vt_annotated, "
+            "vt_waiting, "
+            "vt_parent, "
+            "vt_child, "
+            "t_blocked, "
+            "vt_blocking, "
+            "vt_ready "
+            "FROM virtualtags WHERE uuid='%1'");
 
 
 VirtualTagsModel::VirtualTagsModel(QObject *parent) : QStringListModel(parent)
@@ -63,7 +63,7 @@ void VirtualTagsModel::refresh()
 
     if(this->m_model->lastError().isValid())
     {
-        //FIXME
+        //FIXME: logfile.
     }
     else
     {

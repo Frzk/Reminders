@@ -145,16 +145,6 @@ bool SortFilterModel::contains(const QString &roleName, const QVariant &value) c
     return r;
 }
 
-/*
-int SortFilterModel::sourceRow(int row) const
-{
-    QModelIndex proxyIndex = this->index(row, 0);
-    QModelIndex sourceIndex = this->mapToSource(proxyIndex);
-
-    return sourceIndex.row();
-}
-*/
-
 
 void SortFilterModel::filterChanged()
 {
