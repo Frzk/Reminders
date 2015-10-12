@@ -15,6 +15,32 @@ BackgroundItem {
     id: root
 
     property TagsModel model
+    property VirtualTagsModel vmodel
+
+    property var _virtualTags: {
+        "vt_pending":   qsTr("pending"),
+        "vt_completed": qsTr("completed"),
+        "vt_deleted":   qsTr("deleted"),
+        "vt_overdue":   qsTr("overdue"),
+        "vt_due":       qsTr("due"),
+        "vt_today":     qsTr("today"),
+        "vt_yesterday": qsTr("yesterday"),
+        "vt_tomorrow":  qsTr("tomorrow"),
+        "vt_week":      qsTr("week"),
+        "vt_month":     qsTr("month"),
+        "vt_year":      qsTr("year"),
+        "vt_until":     qsTr("until"),
+        "vt_active":    qsTr("active"),
+        "vt_scheduled": qsTr("scheduled"),
+        "vt_tagged":    qsTr("tagged"),
+        "vt_annotated": qsTr("annotated"),
+        "vt_waiting":   qsTr("waiting"),
+        "vt_parent":    qsTr("parent"),
+        "vt_child":     qsTr("child"),
+        "vt_blocked":   qsTr("blocked"),
+        "vt_blocking":  qsTr("blocking"),
+        "vt_ready":     qsTr("ready")
+    }
 
     height: tagFlow.height + 2 * Theme.paddingMedium
     width: parent.width
@@ -24,9 +50,8 @@ BackgroundItem {
 
         anchors {
             left: parent.left
-            leftMargin: Theme.paddingLarge
+            margins: Theme.paddingLarge
             right: parent.right
-            rightMargin: Theme.paddingLarge
             verticalCenter: parent.verticalCenter
         }
         spacing: Theme.paddingMedium
@@ -41,22 +66,41 @@ BackgroundItem {
             }
             model: root.model
         }
+
+        Repeater {
+            id: virtualTagsRepeater
+
+            delegate: VirtualTag {
+                tag: _virtualTags.hasOwnProperty(display) ? _virtualTags[display] : display
+            }
+            model: root.vmodel
+        }
     }
+
+    /*
+    AvailableTagsModel {
+        id: availableTags
+    }
+    */
 
     onClicked: {
         var picker = pageStack.push("TagPickerDialog.qml", { selectedTags: root.model });
 
         picker.accepted.connect(function() {
-            console.log("Selection :")
+            //picker.model.submitAll()  // Invalidates indexes and so clears the selection.
             var newTags = picker.selection.selection();
 
+            console.log("Selection :")
             for(var i=0 ; i<newTags.length ; i++)
             {
                 console.log("  ", newTags[i].tag_id, ":", newTags[i].tag);
             }
 
-            root.model.clear();
-            //root.model = newTags;
+            root.model.update(newTags)
+        });
+
+        picker.rejected.connect(function() {
+            picker.model.revertAll();
         });
     }
 }
