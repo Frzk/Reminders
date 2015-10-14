@@ -47,15 +47,17 @@ SOURCES += src/Reminders.cpp \
 
 OTHER_FILES += \
     qml/Reminders.qml \
+    qml/components/AnnotationsView.qml \
     qml/components/DateTimePicker.qml \
     qml/components/FolderDelegate.qml \
     qml/components/ReminderDelegate.qml \
     qml/components/Tag.qml \
     qml/components/TagPicker.qml \
-    qml/components/TagPickerDialog.qml \
+    qml/components/VirtualTagsView.qml \
     qml/cover/CoverPage.qml \
     qml/pages/Folders.qml \
-    qml/pages/ProjectPickerDialog.qml \
+    qml/pages/ProjectPicker.qml \
+    qml/pages/TagPickerDialog.qml \
     qml/pages/Reminder.qml \
     qml/pages/Reminders.qml \
     qml/pages/ReminderEditor.qml \
@@ -63,9 +65,7 @@ OTHER_FILES += \
     rpm/$${TARGET}.changes.in \
     rpm/$${TARGET}.spec \
     rpm/$${TARGET}.yaml \
-    $${TARGET}.desktop \
-    qml/components/AnnotationsView.qml \
-    qml/components/VirtualTagsView.qml
+    $${TARGET}.desktop
 
 
 
