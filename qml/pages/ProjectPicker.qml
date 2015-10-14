@@ -35,25 +35,42 @@ import Sailfish.Silica 1.0
 import org.kubler.Reminders 1.0
 
 
-Dialog {
-    id: projectDialog
+Page {
+    id: projectPicker
+
 
     property Item selectedItem: null
     property string project: selectedItem ? selectedItem.text : ""
 
-    canAccept: selectedItem
+
+    signal projectSelected(string newProject)
+
+
+    ProjectsModel {
+        id: projectsModel
+    }
+
+    SortFilterModel {
+        id: filteredProjectsModel
+
+        filter {
+            property: "project"
+            value: searchField.text
+        }
+        sourceModel: projectsModel
+    }
 
     Column {
         id: headerContainer
 
         property alias searchField: searchField
 
-        width: projectDialog.width
+        width: parent.width
 
-        DialogHeader {
-            id: dialogHeader
+        PageHeader {
+            id: pageHeader
 
-            acceptText: project
+            title: qsTr("Project")
         }
 
         SearchField {
@@ -87,7 +104,8 @@ Dialog {
                     id: icon
 
                     height: lblProject.height
-                    source: "image://theme/icon-m-add"
+                    source: "image://theme/icon-m-add?" + (parent.highlighted ? Theme.highlightColor
+                                                                              : Theme.primaryColor)
                     width: height
                 }
 
@@ -114,20 +132,25 @@ Dialog {
                 selectedItem = this
             }
         }
-    }
 
-    ProjectsModel {
-        id: projectsModel
-    }
+        BackgroundItem {
+            id: noProject
 
-    SortFilterModel {
-        id: filteredProjectsModel
+            visible: !newProject.visible
 
-        filter {
-            property: "project"
-            value: searchField.text
+            Label {
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                }
+                color: parent.highlighted ? Theme.highlightColor : Theme.primaryColor
+                text: qsTr("No project")
+                x: searchField.textLeftMargin
+            }
+
+            onClicked: {
+                projectPicker.projectSelected("")
+            }
         }
-        model: projectsModel
     }
 
     SilicaListView
@@ -177,6 +200,10 @@ Dialog {
 
 
         VerticalScrollDecorator {}
+    }
+
+    onProjectChanged: {
+        projectPicker.projectSelected(project)
     }
 
     Component.onCompleted: {
