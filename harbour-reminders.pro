@@ -53,6 +53,7 @@ OTHER_FILES += \
     qml/components/ReminderDelegate.qml \
     qml/components/Tag.qml \
     qml/components/TagPicker.qml \
+    qml/components/VirtualTag.qml \
     qml/components/VirtualTagsView.qml \
     qml/cover/CoverPage.qml \
     qml/pages/Folders.qml \
