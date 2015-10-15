@@ -31,15 +31,18 @@
 /**
  * TODOS and FIXMES:
  *   - Due date / time picker
- *   - Create new Project dialog
+ *   - Repeat
  *   - Dependencies
  *   - Annotations
+ *   - Tags
  *   - Dialog.onAccepted
- *   - Tags editor dialog
+ *   - Dialog.onRejected
  */
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+
+import org.kubler.Reminders 1.0
 
 import "../components"
 import "../pragma/Helpers.js" as Helpers
@@ -48,20 +51,27 @@ Dialog {
     id: dialog
 
 
-    //property int taskIndex: -1
-    //property var task: null
+    property var reminderModel
 
 
     SilicaFlickable
     {
         anchors.fill: parent
+        contentHeight: header.height
+                       + description.height
+                       + priority.height
+                       + project.height
+                       + dateTimePicker.height
+                       + waitDate.height
+                       + repeat.height
+                       + sectionInformation.height
 
         VerticalScrollDecorator {}
 
         DialogHeader {
             id: header
 
-            acceptText: qsTr("Save") //taskIndex >= 0 ? qsTr("Update") : qsTr("Create")
+            acceptText: qsTr("Save") //reminderModel.reminderUUID >= 0 ? qsTr("Update") : qsTr("Create")
         }
 
         TextArea {
@@ -76,7 +86,7 @@ Dialog {
                 pixelSize: Theme.fontSizeLarge
             }
             label: placeholderText
-            placeholderText: qsTr("Description")
+            placeholderText: qsTr("Reminder description")
             text: "This is what I have to do, and it's kinda long, mmmkay ?"
             wrapMode: Text.WordWrap
 
@@ -106,48 +116,26 @@ Dialog {
                 MenuItem { text: qsTr("Medium") }
                 MenuItem { text: qsTr("High") }
             }
-
-            onValueChanged: console.log("New priority: ", value)
         }
 
         ValueButton {
             id: project
 
-            property bool menuOpen: projectContextMenu != null && projectContextMenu.parent === project
             property string _value
 
             anchors {
                 top: priority.bottom
             }
-            height: contentItem.height + (menuOpen ? projectContextMenu.height : 0)
-            highlighted: down && !menuOpen
             label: qsTr("Project")
             labelColor: highlighted ? Theme.highlightColor : Theme.primaryColor
             value: _value ? _value : qsTr("No project")
 
-            ContextMenu {
-                id: projectContextMenu
-
-                MenuItem {
-                    text: qsTr("Remove project")
-                    onClicked: {
-                        project._value = ""
-                    }
-                }
-            }
-
             onClicked: {
-                var projectPicker = pageStack.push(Qt.resolvedUrl("../pages/ProjectPickerDialog.qml"))
-
-                projectPicker.accepted.connect(function() {
-                    project._value = projectPicker.project
-                    console.log("New project : ", project._value)
+                var projectPicker = pageStack.push(Qt.resolvedUrl("ProjectPickerDialog.qml"))
+                projectPicker.onProjectSelected.connect(function(p) {
+                    _value = p
+                    pageStack.navigateBack(PageStackAction.Animated)
                 })
-            }
-
-            onPressAndHold: {
-                if(_value)
-                    projectContextMenu.show(project)
             }
         }
 
@@ -160,7 +148,17 @@ Dialog {
             dateLabel: qsTr("Due date")
             timeLabel: qsTr("Due time")
         }
-/*
+
+        ValueButton {
+            id: repeat
+
+            anchors {
+                top: dateTimePicker.bottom
+            }
+            label: qsTr("Repeat")
+            value: "Not set"
+        }
+
         ValueButton
         {
             id: waitDate
@@ -170,12 +168,14 @@ Dialog {
                                             // The built-in value property is only suitable for displaying purpose.
 
             anchors {
-                top: dueDate.bottom
+                top: repeat.bottom
             }
-            description: value ? ""
-                               : qsTr("The task will remain hidden until this date.")
+            description: valueObject ? ""
+                               : qsTr("The reminder will remain hidden until this date.")
             height: contentItem.height + (_menuOpen ? waitDateContextMenu.height : 0)
-            label: value ? qsTr("Don't show before") : qsTr("Set a wait date")
+            label: qsTr("Wait date")
+            value: valueObject ? Helpers.formatDateOnly(valueObject)
+                               : qsTr("Not set")
 
             DatePickerDialog {
                 id: waitPicker
@@ -215,88 +215,7 @@ Dialog {
                 if(valueObject)
                     waitDateContextMenu.show(waitDate)
             }
-
-            onValueObjectChanged: {
-                value = Utils.formatDatetime(valueObject)
-            }
         }
-*/
-        SectionHeader {
-            id: sectionTags
-
-            anchors {
-                top: dateTimePicker.bottom
-            }
-
-            text: qsTr("Tags")
-        }
-
-/*
-        BackgroundItem {
-            id: tagEditor
-
-            property alias tags: tags
-            property alias vtags: vtags
-
-            anchors {
-                top: waitDate.bottom
-            }
-            contentHeight: visible ? tagEditorColumn.height + Theme.paddingLarge : 0
-            height: contentItem.height
-
-            Column {
-                id: tagEditorColumn
-
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                }
-
-                SectionHeader {
-                    text: qsTr("Tags")
-                }
-
-                Flow {
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        margins: Theme.paddingLarge
-                    }
-                    spacing: Theme.paddingMedium
-
-                    Repeater {
-                        id: tags
-
-                        delegate: Tag {
-                            color: Qt.rgba(255, 255, 255, 0.2)
-                            tag: model.value
-                        }
-                    }
-
-                    Repeater {
-                        id: vtags
-
-                        delegate: Tag {
-                            tag: model.value
-                        }
-                    }
-                }
-            }
-
-            onClicked: {
-                console.log("Open Tag editor dialog.")
-            }
-        }
-*/
-/*
-        SectionHeader {
-            text: qsTr("Dependencies")
-        }
-
-        SectionHeader {
-            text: qsTr("Annotations")
-        }
-*/
     }
 
 
