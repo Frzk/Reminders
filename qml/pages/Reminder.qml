@@ -83,7 +83,11 @@ Page {
                 //visible: task ? (task.status !== "completed" && task.status !== "deleted") : false
 
                 onClicked: {
-                    pageStack.push(Qt.resolvedUrl("ReminderEditor.qml"))
+                    pageStack.push(Qt.resolvedUrl("ReminderEditor.qml"),
+                                   {
+                                       tagsModel: tagsModel,
+                                       annotationsModel: annotationsModel,
+                                   });
                 }
             }
             /*
@@ -143,6 +147,7 @@ Page {
                     leftMargin: Theme.paddingLarge
                     rightMargin: Theme.paddingLarge
                 }
+                color: Theme.highlightColor
                 font.pixelSize: Theme.fontSizeLarge
                 text: reminder_description
                 wrapMode: Text.WordWrap
@@ -216,8 +221,6 @@ Page {
             }
 
             SectionHeader {
-                id: tagsSection
-
                 text: qsTr("Tags")
             }
 
@@ -229,10 +232,11 @@ Page {
                 vmodel: virtualTagsModel
             }
 
+            /*
             SectionHeader {
                 text: qsTr("Dependencies")
             }
-            /*
+
             DependenciesView {
                 editable: false
                 model: dependenciesModel
@@ -242,6 +246,7 @@ Page {
             SectionHeader {
                 text: qsTr("Annotations")
             }
+
             AnnotationsView {
                 editable: false
                 model: annotationsModel
@@ -251,20 +256,32 @@ Page {
         VerticalScrollDecorator {}
     }
 
+    /*
+    ReminderModel {
+        id: reminder
+
+        reminderUUID: reminder_uuid
+
+        onDataChanged: {
+            virtualTagsModel.refresh()
+        }
+    }
+    */
+
     TagsModel {
         id: tagsModel
 
         reminderUUID: reminder_uuid
     }
 
-    AnnotationsModel {
-        id: annotationsModel
+    VirtualTagsModel {
+        id: virtualTagsModel
 
         reminderUUID: reminder_uuid
     }
 
-    VirtualTagsModel {
-        id: virtualTagsModel
+    AnnotationsModel {
+        id: annotationsModel
 
         reminderUUID: reminder_uuid
     }
