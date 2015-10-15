@@ -20,7 +20,7 @@ const QString VirtualTagsModel::QUERY =
             "vt_waiting, "
             "vt_parent, "
             "vt_child, "
-            "t_blocked, "
+            "vt_blocked, "
             "vt_blocking, "
             "vt_ready "
             "FROM virtualtags WHERE uuid='%1'");
@@ -64,6 +64,7 @@ void VirtualTagsModel::refresh()
     if(this->m_model->lastError().isValid())
     {
         //FIXME: logfile.
+        qDebug() << this->m_model->lastError();
     }
     else
     {

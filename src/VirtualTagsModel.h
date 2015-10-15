@@ -1,6 +1,8 @@
 #ifndef VIRTUALTAGSMODEL_H
 #define VIRTUALTAGSMODEL_H
 
+#include <QDebug>
+
 #include <QSqlError>
 #include <QSqlQueryModel>
 #include <QSqlRecord>
