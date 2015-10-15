@@ -54,14 +54,14 @@ BackgroundItem {
             right: parent.right
             verticalCenter: parent.verticalCenter
         }
-        spacing: Theme.paddingMedium
+        spacing: Theme.paddingSmall
 
         Repeater {
             id: tagsRepeater
 
             delegate: Tag {
                 enabled: false
-                selected: true
+                fontColor: root.highlighted ? Theme.highlightColor : Theme.primaryColor
                 tag: model.tag
             }
             model: root.model
@@ -71,6 +71,7 @@ BackgroundItem {
             id: virtualTagsRepeater
 
             delegate: VirtualTag {
+                fontColor: root.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                 tag: _virtualTags.hasOwnProperty(display) ? _virtualTags[display] : display
             }
             model: root.vmodel

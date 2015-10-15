@@ -37,8 +37,9 @@ Tag {
     id: rect
 
     enabled: false
-    color: Theme.rgba(Theme.highlightBackgroundColor, 0.10)
-    fontColor: Theme.secondaryColor
+    color: "transparent"
+    fontColor: Theme.secondaryHighlightColor
+    // fontSize: Theme.fontSizeExtraSmall ?
 
     states: []
 }

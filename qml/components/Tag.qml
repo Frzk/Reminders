@@ -56,12 +56,15 @@ MouseArea {
     property alias color: rect.color
     property alias fontColor: label.color
     property alias fontSize: label.font.pixelSize
-    property alias highlighted: root.pressed
     property alias tag: label.text
-    property bool selected: true
+
+    property bool highlighted: root.pressed && root.containsMouse
+    property bool selected: false
+
 
     height: label.height + Theme.paddingSmall * 2
     width: label.width + Theme.paddingLarge * 2
+
 
     Rectangle {
         id: rect
@@ -79,10 +82,12 @@ MouseArea {
             anchors {
                 centerIn: parent
             }
-            color: Theme.primaryColor
+            color: root.enabled ? root.highlighted ? Theme.highlightColor
+                                                   : Theme.primaryColor
+                                : Theme.highlightColor
             font {
                 //capitalization: Font.AllLowercase
-                pixelSize: Theme.fontSizeExtraSmall
+                pixelSize: Theme.fontSizeSmall
             }
         }
     }
@@ -97,28 +102,22 @@ MouseArea {
 
     states: [
         State {
-            name: "SELECTED_ENABLED"
-            when: root.selected && root.enabled
+            name: "SELECTED"
+            when: root.selected
 
             PropertyChanges {
-                color: Theme.rgba(Theme.highlightBackgroundColor, 0.15)
+                color: Theme.rgba(Theme.highlightBackgroundColor, Theme.highlightBackgroundOpacity)
                 target: rect
-            }
-
-            PropertyChanges {
-                color: Theme.highlightColor
-                target: label
             }
         },
 
         State {
-            name: "SELECTED_DISABLED"
-            extend: "SELECTED_ENABLED"
-            when: root.selected && !root.enabled
+            name: "NOT_SELECTED"
+            when: !root.selected
 
             PropertyChanges {
-                color: Theme.primaryColor
-                target: label
+                color: "transparent"
+                target: rect
             }
         }
     ]
@@ -128,18 +127,10 @@ MouseArea {
             reversible: true
             to: "*"
 
-            ParallelAnimation {
-                ColorAnimation {
-                    duration: 100
-                    easing.type: Easing.InOutQuad
-                    target: rect
-                }
-
-                ColorAnimation {
-                    duration: 100
-                    easing.type: Easing.InOutQuad
-                    target: label
-                }
+            ColorAnimation {
+                duration: 100
+                easing.type: Easing.InOutQuad
+                target: rect
             }
         }
     ]
