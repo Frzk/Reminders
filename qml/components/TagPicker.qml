@@ -80,7 +80,7 @@ BackgroundItem {
 
 
     onClicked: {
-        var picker = pageStack.push("TagPickerDialog.qml", { selectedTags: root.model })
+        var picker = pageStack.push("../pages/TagPickerDialog.qml", { selectedTags: root.model })
 
         picker.accepted.connect(function() {
             var newTags = picker.selection.selection()
