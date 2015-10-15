@@ -317,16 +317,16 @@ CREATE VIEW r AS
 
 -- DUMMY DATA (TESTING PURPOSE) ------------------------------------------------
 
-INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("d1d43cae-60a2-454b-93c3-bab0e6233af9", "p", "Task 01.", "2015-03-10T14:16:45Z", "Test DB.", "");
-INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("ea79c8ed-3abf-4d62-98a5-f27bb4b7ff78", "p", "Task 02.", NULL, "Test DB.", "L");
-INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("ab891a89-2737-41f6-be53-4fc07e8f89de", "p", "Task 03.", "2015-03-03T14:16:45Z", "Test DB.", "M");
-INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("17211f42-5f0b-453c-a91c-d63fb722bd16", "p", "Task 04.", "2015-03-12T14:16:45Z", "Test DB.", "H");
-INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("18ae4075-f223-421a-a852-5d5cd8094cf9", "p", "Task 05.", NULL, "Test DB.", "");
-INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("ec8eb8e9-f674-4c82-9b0d-8d41ac91560c", "p", "Task 06.", NULL, "Test DB.", "L");
-INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("85642219-e06f-4520-ae74-72f06d541358", "p", "Task 07.", "2015-03-10T14:16:45Z", "Test DB.", "M");
-INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("112d0457-3ca0-445e-898a-73e7dca8edf0", "p", "Task 08.", "2015-03-10T14:16:45Z", "Test DB.", "H");
-INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("d4b0b6f7-7824-4a5b-a9a5-5512cd6f1fdc", "c", "Task 09.", "2015-03-10T14:16:45Z", "Test DB.", "");
-INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("7cc4c89b-e578-4bba-ad25-c151fcd7c935", "d", "Task 10.", "2015-03-10T14:16:45Z", "Test DB.", "L");
+INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("d1d43cae-60a2-454b-93c3-bab0e6233af9", "p", "Task 01.", "2015-03-10T14:16:45Z", "Test DB", "");
+INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("ea79c8ed-3abf-4d62-98a5-f27bb4b7ff78", "p", "Task 02.", NULL, "Test DB", "L");
+INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("ab891a89-2737-41f6-be53-4fc07e8f89de", "p", "Task 03.", "2015-03-03T14:16:45Z", "Test DB", "M");
+INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("17211f42-5f0b-453c-a91c-d63fb722bd16", "p", "Task 04.", "2015-03-12T14:16:45Z", "Test DB", "H");
+INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("18ae4075-f223-421a-a852-5d5cd8094cf9", "p", "Task 05.", NULL, "Test DB", "");
+INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("ec8eb8e9-f674-4c82-9b0d-8d41ac91560c", "p", "Task 06.", NULL, "Test DB", "L");
+INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("85642219-e06f-4520-ae74-72f06d541358", "p", "Task 07.", "2015-03-10T14:16:45Z", "Test DB", "M");
+INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("112d0457-3ca0-445e-898a-73e7dca8edf0", "p", "Task 08.", "2015-03-10T14:16:45Z", "Test DB", "H");
+INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("d4b0b6f7-7824-4a5b-a9a5-5512cd6f1fdc", "c", "Task 09.", "2015-03-10T14:16:45Z", "Test DB", "");
+INSERT INTO reminders(uuid, status, description, due, project, priority) VALUES("7cc4c89b-e578-4bba-ad25-c151fcd7c935", "d", "Task 10.", "2015-03-10T14:16:45Z", "Test DB", "L");
 
 INSERT INTO annotations(description, reminder_uuid) VALUES('Annotation 1.', 'd1d43cae-60a2-454b-93c3-bab0e6233af9');
 INSERT INTO annotations(description, reminder_uuid) VALUES('Annotation 2.', 'd1d43cae-60a2-454b-93c3-bab0e6233af9');
@@ -336,25 +336,6 @@ INSERT INTO annotations(description, reminder_uuid) VALUES('Annotation 1.', 'ea7
 INSERT OR IGNORE INTO dependencies(reminder_uuid, dependency_uuid) VALUES('d1d43cae-60a2-454b-93c3-bab0e6233af9', 'ea79c8ed-3abf-4d62-98a5-f27bb4b7ff78');
 INSERT OR IGNORE INTO dependencies(reminder_uuid, dependency_uuid) VALUES('d1d43cae-60a2-454b-93c3-bab0e6233af9', 'ab891a89-2737-41f6-be53-4fc07e8f89de');
 INSERT OR IGNORE INTO dependencies(reminder_uuid, dependency_uuid) VALUES('ab891a89-2737-41f6-be53-4fc07e8f89de', '17211f42-5f0b-453c-a91c-d63fb722bd16');
-
-
-INSERT OR IGNORE INTO tags(tag) VALUES('test');
--- SELECT id FROM tags WHERE tag='test';
-INSERT OR IGNORE INTO remindersXtags(reminder_uuid, tag_id) VALUES("ab891a89-2737-41f6-be53-4fc07e8f89de", 1);
-
-INSERT OR IGNORE INTO tags(tag) VALUES('dev');
--- SELECT...
-INSERT OR IGNORE INTO remindersXtags(reminder_uuid, tag_id) VALUES("d1d43cae-60a2-454b-93c3-bab0e6233af9", 2);
-INSERT OR IGNORE INTO remindersXtags(reminder_uuid, tag_id) VALUES("17211f42-5f0b-453c-a91c-d63fb722bd16", 2);
-
-INSERT OR IGNORE INTO tags(tag) VALUES('wip');
--- SELECT...
-INSERT OR IGNORE INTO remindersXtags(reminder_uuid, tag_id) VALUES("d1d43cae-60a2-454b-93c3-bab0e6233af9", 3);
-INSERT OR IGNORE INTO remindersXtags(reminder_uuid, tag_id) VALUES("17211f42-5f0b-453c-a91c-d63fb722bd16", 3);
-
-INSERT OR IGNORE INTO tags(tag) VALUES('next');
--- SELECT...
-INSERT OR IGNORE INTO remindersXtags(reminder_uuid, tag_id) VALUES("17211f42-5f0b-453c-a91c-d63fb722bd16", 4);
 
 -- -----------------------------------------------------------------------------
 
