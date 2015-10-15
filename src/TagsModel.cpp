@@ -281,8 +281,6 @@ void TagsModel::refresh()
 
     if(!this->query().isActive())
         this->select();
-
-    qDebug() << this->query().lastQuery();
 }
 
 void TagsModel::emitCountChanged() const
