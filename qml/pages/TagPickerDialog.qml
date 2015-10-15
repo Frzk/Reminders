@@ -77,11 +77,13 @@ Dialog {
                 id: selection
 
                 anchors {
+                    bottomMargin: Theme.paddingLarge
                     left: parent.left
-                    margins: Theme.paddingLarge
+                    leftMargin: Theme.horizontalPageMargin
                     right: parent.right
+                    rightMargin: anchors.leftMargin
+                    topMargin: anchors.bottomMargin
                 }
-                //height: parent.height - searchField.height - column.spacing
                 spacing: Theme.paddingLarge
 
                 Tag {
