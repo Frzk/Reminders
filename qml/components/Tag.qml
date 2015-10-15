@@ -62,8 +62,8 @@ MouseArea {
     property bool selected: false
 
 
-    height: label.height + Theme.paddingSmall * 2
-    width: label.width + Theme.paddingLarge * 2
+    height: label.height + (enabled ? Theme.paddingSmall : 0) * 2
+    width: label.width + (enabled ? Theme.paddingLarge : Theme.paddingSmall) * 2
 
 
     Rectangle {
@@ -87,7 +87,7 @@ MouseArea {
                                 : Theme.highlightColor
             font {
                 //capitalization: Font.AllLowercase
-                pixelSize: Theme.fontSizeSmall
+                pixelSize: Theme.fontSizeMedium
             }
         }
     }
