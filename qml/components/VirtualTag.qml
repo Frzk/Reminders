@@ -33,13 +33,27 @@ import Sailfish.Silica 1.0
 
 import "../components"
 
-Tag {
-    id: rect
+Item {
 
-    enabled: false
-    color: "transparent"
-    fontColor: Theme.secondaryHighlightColor
-    // fontSize: Theme.fontSizeExtraSmall ?
+    property alias tag: label.text
+    property alias fontColor: label.color
 
-    states: []
+    anchors {
+        leftMargin: Theme.paddingSmall
+        rightMargin: anchors.leftMargin
+    }
+    height: label.height + Theme.paddingSmall * 2
+    width: label.width + Theme.paddingMedium * 2
+
+    Label {
+        id: label
+
+        anchors {
+            centerIn: parent
+        }
+        color: Theme.secondaryHighlightColor
+        font {
+            pixelSize: Theme.fontSizeExtraSmall
+        }
+    }
 }
