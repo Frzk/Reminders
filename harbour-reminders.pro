@@ -29,7 +29,8 @@ HEADERS += \
     src/SortProperty.h \
     src/Storage.h \
     src/TagsModel.h \
-    src/VirtualTagsModel.h
+    src/VirtualTagsModel.h \
+    src/Reminder.h
 
 SOURCES += src/Reminders.cpp \
     src/AnnotationsModel.cpp \
@@ -42,12 +43,12 @@ SOURCES += src/Reminders.cpp \
     src/SortProperty.cpp \
     src/Storage.cpp \
     src/TagsModel.cpp \
-    src/VirtualTagsModel.cpp
+    src/VirtualTagsModel.cpp \
+    src/Reminder.cpp
 
 
 OTHER_FILES += \
     qml/Reminders.qml \
-    qml/components/AnnotationsView.qml \
     qml/components/DateTimePicker.qml \
     qml/components/FolderDelegate.qml \
     qml/components/ReminderDelegate.qml \
@@ -56,6 +57,7 @@ OTHER_FILES += \
     qml/components/VirtualTag.qml \
     qml/components/VirtualTagsView.qml \
     qml/cover/CoverPage.qml \
+    qml/pages/Annotations.qml \
     qml/pages/Folders.qml \
     qml/pages/ProjectPicker.qml \
     qml/pages/TagPickerDialog.qml \
